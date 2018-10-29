@@ -6,7 +6,7 @@
   lineinfile: dest={{env_file}} insertafter="{{item.position}}" line="{{item.value}}" state=present
   with_items:
   - {position: EOF, value: "\n"}
-  - {position: EOF, value: "export JAVA_HOME=/usr/local/{{jdk_version}}"}
+  - {position: EOF, value: "export JAVA_HOME=/usr/local/java"}
   - {position: EOF, value: "export PATH=$JAVA_HOME/bin:$PATH"}
   - {position: EOF, value: "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"}
 - name: enforce env 

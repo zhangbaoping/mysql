@@ -1,0 +1,3 @@
+jdk_package_name: java_jdk.tar.gz                                                                                                      
+env_file: /etc/profile
+jdk_version: java

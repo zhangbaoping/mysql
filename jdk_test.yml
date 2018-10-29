@@ -4,7 +4,7 @@
   copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
 - name: tar java_jdk.tar.gz
   shell: chdir=/bubidata/server/ tar zxf java_jdk.tar.gz
-- name: soft link1
+- name: soft link
   file: src=/package/java dest=/bubidata/server/java state=link
 - name: java_profile config
   shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile

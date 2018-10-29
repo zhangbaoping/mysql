@@ -11,4 +11,4 @@
   - name: config profile
     lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="PATH=$PATH:$JAVA_HOME/bin"
   - name: source profile
-	  shell: source /etc/profile
+    shell: source /etc/profile

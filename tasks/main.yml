@@ -12,4 +12,4 @@
 - name: enforce env 
   shell: source {{env_file}}
 
-jdk8 tasks
+jdk tasks

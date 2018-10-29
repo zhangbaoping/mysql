@@ -1,15 +1,12 @@
-- name: mkdir necessary catalog                                                                                                               
-  file: path=/bubidata/server/ state=directory mode=0755
-- name: copy and unzip jdk 
-  unarchive: src={{jdk_package_name}} dest=/bubidata/server/
-- name: set env 
-  lineinfile: dest={{env_file}} insertafter="{{item.position}}" line="{{item.value}}" state=present
-  with_items:
-  - {position: EOF, value: "\n"}
-  - {position: EOF, value: "export JAVA_HOME=/bubidata/server/{{jdk_version}}"}
-  - {position: EOF, value: "export PATH=$JAVA_HOME/bin:$PATH"}
-  - {position: EOF, value: "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"}
-- name: enforce env
-  shell: source {{env_file}}
-  
-    jdk8 tasks
+- hosts: 192.168.6.122
+  tasks: 
+  - name: jdk package copy
+    copy: "src=/package/java_jdk.tar.gz dest=/bubidata/server/" 
+  - name: tar xvf package
+    shell: "tar xvzf /package/java_jdk.tar.gz -C /bubidata/server/" 
+  - name: set profile
+    shell: "echo 'export JAVA_HOME=/bubidata/server/java' >> /etc/profile" 
+  - name: set profile
+    shell: "echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile" 
+  - name: set profile
+    shell: "echo 'export CLASSPATH=.:/$JAVA_HOME/lib/dt.jar:/$JAVA_HOME/lib/tools.jar' >> /etc/profile"

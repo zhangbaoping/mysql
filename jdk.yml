@@ -10,3 +10,5 @@
     shell: "echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile" 
   - name: set profile
     shell: "echo 'export CLASSPATH=.:/$JAVA_HOME/lib/dt.jar:/$JAVA_HOME/lib/tools.jar' >> /etc/profile"
+  - name: source profile
+    shell: source /etc/profile

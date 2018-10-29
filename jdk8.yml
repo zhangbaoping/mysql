@@ -1,0 +1,14 @@
+- hosts: 192.168.6.123
+  tasks: 
+  - name: copy jdk package 
+    copy: "src=/package/java_jdk.tar.gz dest=/bubidata/server/" 
+  - name: extract archive jdk
+    shell: "tar xvzf /package/java_jdk.tar.gz -C /bubidata/server/" 
+  - name: config profile
+    lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="JAVA_HOME=/bubidata/server/java"
+  - name: config profile
+    lineinfile: dest=/etc/profile regexp="^CLASS_PATH=" line="CLASS_PATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib"
+  - name: config profile
+    lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="PATH=$PATH:$JAVA_HOME/bin"
+  - name: source profile
+	  shell: source /etc/profile

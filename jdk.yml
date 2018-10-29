@@ -1,4 +1,12 @@
 - hosts: 192.168.6.122
-  remote_user: root
-  roles:
-    - jdk8
+  tasks: 
+  - name: jdk package copy
+    copy: "src=/package/java_jdk.tar.gz dest=/bubidata/server/" 
+  - name: tar xvf package
+    shell: "tar xvzf /package/java_jdk.tar.gz -C /bubidata/server/" 
+  - name: set profile
+    shell: "echo 'export JAVA_HOME=/bubidata/server/java' >> /etc/profile" 
+  - name: set profile
+    shell: "echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile" 
+  - name: set profile
+    shell: "echo 'export CLASSPATH=.:/$JAVA_HOME/lib/dt.jar:/$JAVA_HOME/lib/tools.jar' >> /etc/profile"

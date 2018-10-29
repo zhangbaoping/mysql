@@ -11,5 +11,5 @@
   - {position: EOF, value: "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"}
 - name: enforce env
   shell: source {{env_file}}
-
-jdk8 tasks
+  
+    jdk8 tasks

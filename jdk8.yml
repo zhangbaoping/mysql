@@ -1,9 +1,9 @@
 - name: copy java_jdk.tar.gz
-  copy: src=/package/java_jdk.tar.gz dest=/usr/local                                                                                                
+  copy: src=/package/java_jdk.tar.gz dest=/bubidata/server                                                                                                
 - name: unzip jdk 
-  command: /bin/tar xf /tmp/java_jdk.tar.gz -C /usr/local
+  command: /bin/tar xf /tmp/java_jdk.tar.gz -C /bubidata/server
 - name: add /etc/profile
-  lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="JAVA_HOME=/usr/local/java
+  lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="JAVA_HOME=/bubidata/server/java
 - name: add /etc/profile
   lineinfile: dest=/etc/profile regexp="^CLASS_PATH=" line="CLASS_PATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib"
 - name: add /etc/profile

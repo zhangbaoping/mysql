@@ -1,7 +1,7 @@
-- name: mkdir necessary catalog                                                                                                      
-  file: path=/usr/local state=directory mode=0755
-- name: copy and unzip jdk 
-  unarchive: src=/package/java_jdk.tar.gz dest=/usr/local
+- name: copy java_jdk.tar.gz
+  copy: src=/package/java_jdk.tar.gz dest=/usr/local                                                                                                
+- name: unzip jdk 
+  command: /bin/tar xf /tmp/java_jdk.tar.gz -C /usr/local
 - name: set env 
   lineinfile: dest={{env_file}} insertafter="{{item.position}}" line="{{item.value}}" state=present
   with_items:

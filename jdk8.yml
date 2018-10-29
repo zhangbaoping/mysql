@@ -2,12 +2,11 @@
   copy: src=/package/java_jdk.tar.gz dest=/usr/local                                                                                                
 - name: unzip jdk 
   command: /bin/tar xf /tmp/java_jdk.tar.gz -C /usr/local
-- name: set env 
-  lineinfile: dest={{env_file}} insertafter="{{item.position}}" line="{{item.value}}" state=present
-  with_items:
-  - {position: EOF, value: "\n"}
-  - {position: EOF, value: "export JAVA_HOME=/usr/local/java"}
-  - {position: EOF, value: "export PATH=$JAVA_HOME/bin:$PATH"}
-  - {position: EOF, value: "export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"}
-- name: enforce env 
-  shell: source {{env_file}}
+- name: add /etc/profile
+  lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="JAVA_HOME=/usr/local/java
+- name: add /etc/profile
+  lineinfile: dest=/etc/profile regexp="^CLASS_PATH=" line="CLASS_PATH=$JAVA_HOME/lib:$JAVA_HOME/jre/lib"
+- name: add /etc/profile
+  lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="PATH=$PATH:$JAVA_HOME/bin"
+- name: add /etc/profile
+  lineinfile : dest=/etc/profile regexp="^export JAVA_HOME" line="export JAVA_HOME"

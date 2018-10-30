@@ -1,5 +1,4 @@
 - hosts: 192.168.6.123
-  remote_user:  root
   tasks: 
   - name: copy jdk package  
     copy: "src=/package/java_jdk.tar.gz dest=/bubidata/server/" 

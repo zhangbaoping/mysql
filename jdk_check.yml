@@ -1,4 +1,4 @@
 - hosts: 192.168.6.123
   tasks: 
   - name: check jdk configuration
-    shell:  java -version
+    shell:  /bubidata/server/java/bin/java -version

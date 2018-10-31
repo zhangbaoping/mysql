@@ -1,7 +1,4 @@
 - hosts: 192.168.6.123
   tasks: 
   - name: check jdk configuration
-    shell:  /bin/tail -n 10 /etc/profile
-    when: bashrc_result.stdout.find('JAVA_HOME') == -1
-    with_items:
-     - export JAVA_HOME=/bubidata/server/java
+    shell:  java -version

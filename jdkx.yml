@@ -2,13 +2,14 @@
 - hosts: 192.168.6.122,192.168.6.123
   remote_user: root
   tasks:
+  - name: check jdk variable 
+    shell: cat /etc/profile
+    register: result
   - name: copy jdk remote hosts
     copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
   - name: tar xvf java_jdk.tar.gz
     shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
-  - name: check jdk variable 
-    shell: cat /etc/profile
-    register: result
+    
   - name: java_profile config
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
     when: result.stdout.find('JAVA_HOME') == -1

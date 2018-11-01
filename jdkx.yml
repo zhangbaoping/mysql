@@ -1,0 +1,14 @@
+---
+- hosts: 192.168.6.123
+  - name: copy jdk remote hosts
+    copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+  - name: tar java_jdk.tar.gz
+    shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
+  - name: java_profile config
+    shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
+    with_items:
+      - export JAVA_HOME=/bubidata/server/java
+      - export PATH=$JAVA_HOME/bin:$PATH
+      - export CLASSPATH=.:/$JAVA_HOME/lib/dt.jar:/$JAVA_HOME/lib/tools.jar
+  - name: source profile
+    shell: source /etc/profile

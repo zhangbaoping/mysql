@@ -4,7 +4,7 @@
   tasks:
   - name: copy jdk remote hosts
     copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
-  - name: tar java_jdk.tar.gz
+  - name: tar xvf java_jdk.tar.gz
     shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
   - name: java_profile config
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile

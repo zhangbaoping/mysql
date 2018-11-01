@@ -1,0 +1,13 @@
+---
+- hosts : 192.168.6.121,192.168.6.122,192.168.6.133
+  remote_user : root
+  tasks :
+      - name: create file 1
+        shell: touch /tmp/file1.txt
+        tags:
+            - cfile1
+            - cfile3
+      - name: create file 2
+        shell : touch /tmp/file2.txt
+        tags:
+            - cfile2

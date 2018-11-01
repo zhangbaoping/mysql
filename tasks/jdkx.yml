@@ -1,5 +1,6 @@
 ---
-hosts: 192.168.6.123
+- hosts: 192.168.6.123
+  - name: copy package
   - name:  copy jdk remote hosts
     copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
   - name: tar java_jdk.tar.gz

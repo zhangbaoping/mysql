@@ -1,7 +1,7 @@
 ---
 - hosts: 192.168.6.122
   tasks:
-  
+
     # 创建组
     - group: name=evens state=present
     - group: name=odds state=present
@@ -14,6 +14,6 @@
     - file: dest=/var/stuff/{{ item }} state=directory
       with_sequence: start=4 end=16 stride=2
 
-    # 简单实用序列的方法：创建4 个用户组分表是组group1 group2 group3 group4
+    # 简单实用序列的方法：创建4个用户组分表是组group1 group2 group3 group4
     - group: name=group{{ item }} state=present
       with_sequence: count=4

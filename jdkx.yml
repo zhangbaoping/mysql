@@ -10,7 +10,7 @@
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
     with_items:
       - export JAVA_HOME=/bubidata/server/java
-      - export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-      - export PATH=$JAVA_HOME/bin:$PATH
+      - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
+      - export PATH=\$JAVA_HOME/bin:\$PATH
   - name: source profile
     shell: source /etc/profile

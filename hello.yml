@@ -1,6 +1,0 @@
-- hosts: zwy
-  remote_user: root
-  tasks:
-  
-  - name: disable selinux
-    command: '/sbin/setenforce 0'

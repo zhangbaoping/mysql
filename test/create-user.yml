@@ -1,6 +1,7 @@
 ---
 - hosts: 192.168.6.122
   tasks:
+  
     # 创建组
     - group: name=evens state=present
     - group: name=odds state=present

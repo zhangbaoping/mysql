@@ -1,6 +1,5 @@
-- name: Hello World Sample
-  hosts: all
+- hosts: zwy
+  remote_user: root
   tasks:
-    - name: Hello Message
-      debug:
-        msg: "Hello World!"
+  - name: disable selinux
+    command: '/sbin/setenforce 0'

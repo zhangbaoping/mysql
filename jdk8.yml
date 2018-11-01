@@ -3,11 +3,11 @@
   - name: copy jdk package  
     copy: "src=/package/java_jdk.tar.gz dest=/bubidata/server/" 
   - name: extract archive jdk
-    shell: "tar xvzf /package/java_jdk.tar.gz -C /bubidata/server/" 
+    shell: "tar xvzf /package/java_jdk.tar.gz -C /bubidata/server/"
   - name: config profile
     lineinfile: dest=/etc/profile regexp="^JAVA_HOME=" line="export JAVA_HOME=/bubidata/server/java"
   - name: config profile
-    lineinfile: dest=/etc/profile regexp="^CLASS_PATH=" line="export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"
+    lineinfile: dest=/etc/profile regexp="^CLASS_PATH="line="export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar"
   - name: config profile
     lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="export PATH=$JAVA_HOME/bin:$PATH"
   handlers:

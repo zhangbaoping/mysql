@@ -12,4 +12,4 @@
     lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="export PATH=$JAVA_HOME/bin:$PATH"
   handlers:
   - name: source profile
-    shell: source /etc/profile
+    shell: source /etc/profile 

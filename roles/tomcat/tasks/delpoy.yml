@@ -11,11 +11,13 @@
   command: mv "{{ tomcat_root }}"/webapps "{{ backup_dir }}/{{ module }}"-webapps.bak
 - name: 建立webapps目录
   file: dest={{ tomcat_root }}/webapps state=directory owner=qsc_user group=qsc_user
-#- name: 下载新程序
-#  get_url: url=http://www.xxx.com/jenkins/view/test/job/{{ porject }}/{{ buidnum}}/artifact/{{ project-module }}/target/ROOT.war dest="{{ tomcat_root }}"/webapps force=yes force_basic_auth=yes url_username=xxxx url_password=xxxx
+- name: unzip project package
+  shell: unzip xxxx.zip 
 - name: start tomcat.
   shell: su -c  {{ tomcat_root }}/bin/startup.sh qsc_user
 - name: 等待服务启动
   wait_for: port={{ RUN_PORT }} delay=5 timeout=30
+- name: 验证服务是否重启成功
+  shell:  curl http://localhost:port
 - name: 重启服务执行完毕
   shell: echo "Restart Successful !!!"

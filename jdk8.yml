@@ -13,8 +13,3 @@
   handlers:
   - name: source profile
     shell: source /etc/profile
-
-
-本周工作内容：
-1. 版本更新
-2. ansible-playbook 语法学习，JDK环境检查部署yml构建

@@ -1,0 +1,10 @@
+---
+- include: init.yml
+  tags:
+    - init
+- include: restart.yml
+  tags:
+    - restart
+- include: deploy.yml
+  tags:
+    - deploy

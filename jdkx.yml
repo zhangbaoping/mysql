@@ -27,3 +27,4 @@
   # 应用配置文件生效
   - name: source profile
     shell: source /etc/profile
+    

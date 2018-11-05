@@ -10,7 +10,7 @@
   # 复制jdk文件到目标主机
   - name: copy jdk remote hosts
     copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
-    #shell: echo -e "\033[35m 紫色字 \033[0m"
+    shell: echo -e "\033[35m 紫色字 \033[0m"
 
   # 解压jdk包到目标路径
   - name: tar xvf java_jdk.tar.gz

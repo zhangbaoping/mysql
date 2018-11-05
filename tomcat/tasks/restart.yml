@@ -1,0 +1,11 @@
+---
+- name: stop tomcat.
+  shell: su -c  {{ tomcat_root }}/bin/shutdown.sh qsc_user
+- name: 验证服务是否关闭
+  wait_for: port={{ RUN_PORT }} delay=3 state=stopped timeout=10
+- name: start tomcat.
+  shell: su -c  {{ tomcat_root }}/bin/startup.sh qsc_user
+- name: 等待服务启动
+  wait_for: port={{ RUN_PORT }} delay=5 timeout=30
+- name: 重启服务执行完毕
+  shell: echo "Restart Successful !!!"

@@ -7,6 +7,7 @@
     data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
+    run_port: 32000
 
   tasks:
     - name: Create directory
@@ -20,6 +21,8 @@
 
     - name: stop tomcat
       shell: chdir={{ data_path }}/{{ project_name }}/bin/ sh launch stop 
+    - name: 验证服务是否关闭
+      wait_for: port={{ run_port }} delay=3 state=stopped timeout=10
 
     - name: backup local java package
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}

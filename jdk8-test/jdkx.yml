@@ -7,7 +7,7 @@
   tasks:
 
   - name: exec shell
-    shell: chdir={{ shell_dir }}/  nohup ./java_package_check.sh  > /tmp/md5sum.txt &
+    shell: chdir={{ script_home }}/  nohup ./java_package_check.sh  > /tmp/md5sum.txt &
   
   - name: exec shell
     shell: cat /tmp/md5sum.txt

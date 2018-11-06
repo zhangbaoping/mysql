@@ -33,7 +33,7 @@
 
     - name: 拷贝新版java服务包并解压
       #copy: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
-      file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/ state=link
+      file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
 
     - name: 解压文件
       shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

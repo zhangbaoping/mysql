@@ -10,9 +10,6 @@
     #shell: chdir={{ shell_dir }}/ ./java_package_check.sh
     shell: ansible -m shell -a "sh /package/java_package_check.sh"
 
-  - name: expect shell
-    shell: cat /tmp/md5sum.txt 
-
   # 检查环境变量是否存在jdk的配置，并定义变量result/bi
   - name: check jdk variable 
     shell: cat /etc/profile

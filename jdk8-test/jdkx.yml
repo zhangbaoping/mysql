@@ -2,7 +2,7 @@
 - hosts: 192.168.6.122,192.168.6.123
   remote_user: root
   vars: 
-    shell_dir=/package
+    shell_dir: /package
   tasks:
   #校验包的md5
   - name: exec shell

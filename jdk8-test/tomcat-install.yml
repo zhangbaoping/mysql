@@ -10,7 +10,7 @@
     run_port: 32000
 
   tasks:
-    - name: Create directory
+    - name: 创建变量对应的目录
       file: path={{ item }} state=directory
       with_items:
         - "{{ local_host_file }}/"
@@ -19,10 +19,17 @@
         - "{{ project_name }}/"
         - "{{ data_path }}/"
 
-    - name: stop tomcat
+    - name: 停止运行的java服务
       shell: chdir={{ data_path }}/{{ project_name }}/bin/ sh launch stop 
+
     - name: 验证服务是否关闭
       wait_for: port={{ run_port }} delay=3 state=stopped timeout=10
 
-    - name: backup local java package
+    - name: 备份现有旧的服务包
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}
+
+    - name: 拷贝新版java服务包到目标机器
+      copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
+
+    - name:  解压文件
+      shell: dhdir={{ data_path }}/{{ project_name }}/  unzip -d {{ data_path }}/{{ project_name }}.zip 

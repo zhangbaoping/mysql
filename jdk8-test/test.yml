@@ -1,0 +1,8 @@
+  tasks:
+  #校验包的md5
+  - name: exec shell
+    #shell: chdir={{ shell_dir }}/ ./java_package_check.sh
+    file: path={{ item }} state=absent
+    with_items:
+      - "{{ script_home }}"
+      - echo "sh java_package_check.sh"

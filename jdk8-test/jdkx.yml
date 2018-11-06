@@ -7,8 +7,9 @@
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: chdir={{ shell_dir }}/ ./java_package_check.sh > /etc/md5sum.txt
-  
+    #shell: chdir={{ shell_dir }}/ ./java_package_check.sh
+    shell: ansible -m shell -a "sh /package/java_package_check.sh"
+
   - name: expect shell
     shell: cat /tmp/md5sum.txt 
 

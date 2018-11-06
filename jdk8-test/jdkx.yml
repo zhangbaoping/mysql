@@ -3,6 +3,7 @@
   remote_user: root
   vars: 
     shell_dir: /package
+    
   tasks:
   #校验包的md5
   - name: exec shell

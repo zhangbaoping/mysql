@@ -7,7 +7,7 @@
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: chdir={{ shell_dir }}/ && /bin/sh java_package_check.sh 
+    shell: chdir={{ shell_dir }}/ ./java_package_check.sh 
   
   - name: expect shell
     shell: cat /tmp/md5sum.txt 

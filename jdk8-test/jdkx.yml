@@ -4,7 +4,9 @@
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: /bin/echo {{ /bin/sh /package/java_package_check.sh }}
+    shell: /bin/echo {{ md5sum }} > /tmp/md5sum.txt
+    when: -1 == -1
+      - export /tmp/md5sum.txt
 
   # 检查环境变量是否存在jdk的配置，并定义变量result/bi
   - name: check jdk variable 

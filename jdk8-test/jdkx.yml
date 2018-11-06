@@ -2,6 +2,9 @@
 - hosts: 192.168.6.122,192.168.6.123
   remote_user: root
   tasks:
+  #校验包的md5
+  - name: exec shell
+    shell: /package/java_package_check.sh
   # 检查环境变量是否存在jdk的配置，并定义变量result
   - name: check jdk variable 
     shell: cat /etc/profile

@@ -17,10 +17,9 @@
         - "{{ project_backup_path }}/"
         - "{{ project_name }}/"
         - "{{ data_path }}/"
-    
-    - name: backup local java package
-      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}
 
     - name: stop tomcat
       shell: su -c  {{ data_path }}/{{ project_name }}/bin/launch stop 
 
+    - name: backup local java package
+      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}

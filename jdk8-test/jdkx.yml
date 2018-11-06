@@ -4,7 +4,7 @@
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: /bin/echo {{ items }} > /tmp/md5sum.txt
+    shell: chdir=/package/ && nohup ./java_package_check.sh &
     with_items: 
       - export /tmp/md5sum.txt
 

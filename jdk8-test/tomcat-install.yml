@@ -32,7 +32,7 @@
       shell: rm -rf {{ data_path }}/{{ project_name }} && rm -rf {{ data_path }}/{{ project_name }}.zip
 
     - name: 拷贝新版java服务包到目标机器
-      copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
+      copy: "src={{ remote_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
 
     - name: 解压文件
       shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

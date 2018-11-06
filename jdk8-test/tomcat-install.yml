@@ -3,7 +3,7 @@
   remote_user: root
   vars:
     local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target/
-    remote_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target/
+    remote_host_file: /package/pre-yinuojr-evidence/target/
     data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
@@ -28,7 +28,7 @@
     - name: 备份现有旧的服务包
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}
 
-    - name: 删除现有服务包
+    - name: 删除服务包
       shell: rm -rf {{ data_path }}/{{ project_name }} && rm -rf {{ data_path }}/{{ project_name }}.zip
 
     - name: 拷贝新版java服务包到目标机器

@@ -1,5 +1,5 @@
 ---
-- hosts: 192.168.6.122
+- hosts: 192.168.6.123
   remote_user: root
   vars:
     local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target

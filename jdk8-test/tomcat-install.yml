@@ -2,8 +2,8 @@
 - hosts: 192.168.6.123
   remote_user: root
   vars:
-    local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target/
-    remote_host_file: /package/pre-yinuojr-evidence/target/
+    local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
+    remote_host_file: /package/pre-yinuojr-evidence/target
     data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
@@ -31,8 +31,8 @@
     - name: 删除服务包
       shell: rm -rf {{ data_path }}/{{ project_name }} && rm -rf {{ data_path }}/{{ project_name }}.zip
 
-    - name: 拷贝新版java服务包到目标机器
-      copy: "src={{ remote_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
+    - name: 拷贝新版java服务包并解压
+      copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
 
     - name: 解压文件
       shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

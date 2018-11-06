@@ -1,10 +1,15 @@
 ---
 - hosts: 192.168.6.122,192.168.6.123
   remote_user: root
+  vars: 
+    shell_dir=/package
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: chdir=/package/ && nohup ./java_package_check.sh 
+    shell: chdir={{ shell_dir }}/ && ./java_package_check.sh > /tmp/md5sum.txt
+  
+  - name: expect shell
+    shell: cat /tmp/md5sum.txt 
 
   # 检查环境变量是否存在jdk的配置，并定义变量result/bi
   - name: check jdk variable 

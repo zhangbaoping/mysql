@@ -2,13 +2,16 @@
 - hosts: 192.168.6.122,192.168.6.123
   remote_user: root
   vars: 
-    shell_dir: /package
+    script_home: /package
 
   tasks:
   #校验包的md5
   - name: exec shell
     #shell: chdir={{ shell_dir }}/ ./java_package_check.sh
-    shell: /usr/bin/ansible -m shell -a "sh /package/java_package_check.sh"
+    file: path={{ item }} state=absent
+    with_items:
+      - "{{ script_home }}"
+      - java_package_check.sh
 
   # 检查环境变量是否存在jdk的配置，并定义变量result/bi
   - name: check jdk variable 

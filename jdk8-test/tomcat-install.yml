@@ -29,7 +29,10 @@
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}
 
     - name: 删除现有服务包
-      shell: rm -rf {{ data_path }}/{{ project_name }}/
+      shell: rm -rf {{ data_path }}/{{ project_name }}
 
     - name: 拷贝新版java服务包到目标机器
-      copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
+      copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
+
+    - name: 解压文件
+      shell: chdir={{ data_path }}/{{ project_name }}/  unzip -d {{ data_path }}/{{ project_name }}.zip

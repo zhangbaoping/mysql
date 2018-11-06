@@ -1,0 +1,28 @@
+---
+- hosts: 192.168.6.122
+  remote_user: root
+  vars:
+    local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
+    remote_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
+    data_path: /bubidata/server/data
+    project_backup_path: /data/backup
+    project_name: yinuojr-evidence
+
+  tasks:
+    - name: Create directory
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ local_host_file }}/"
+        - "{{ remote_host_file }}/"
+        - "{{ project_backup_path }}/"
+        - "{{ project_name }}/"
+        - "{{ data_path }}/"
+    
+    - name: backup local java package
+      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz -C {{ data_path }}/{{ project_name}}
+
+    - name: stop tomcat
+      shell: su -c  {{ data_path }}/{{ project_name }}/bin/launch stop 
+    - name: 验证服务是否关闭
+      wait_for: port={{ RUN_PORT }} delay=3 state=stopped timeout=10
+      

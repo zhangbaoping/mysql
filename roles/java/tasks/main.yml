@@ -1,10 +1,12 @@
----
-- include: init.yml
-  tags:
-    - init
-- include: restart.yml
-  tags:
-    - restart
-- include: deploy.yml
-  tags:
-    - deploy
+- name: 将tomcat压缩包copy到远程主机 apache-tomcat-7.0.63.zip
+  copy: src=apache-tomcat-{{ tomcat_version }}.zip dest=/data
+- name: 解压tomcat压缩包apache-tomcat-7.0.63.zip
+  shell: cd /data && unzip apache-tomcat-{{ tomcat_version }}.zip
+- name: 将tomcat压缩包 重新命名为 tomcat
+  file: src=/data/apache-tomcat-{{ tomcat_version }} dest=/data/tomcat state=link
+- name: add /etc/profile
+  shell: chdir=/data/tomcat/bin sed -i '1a source /etc/profile' startup.sh
+- name: 首次启动tomcat
+  shell: chdir=/data/tomcat/bin nohup ./catalina.sh start &
+- name: remove apache-tomcat-7.0.63.zip
+  file: path=/data/apache-tomcat-{{ tomcat_version }}.zip state=absent

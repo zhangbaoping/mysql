@@ -1,0 +1,4 @@
+- name: stop tomcat 
+  shell: "ps -ef |grep tomcat |grep -v grep |awk '{print $2}' |xargs kill -9"
+- name: start tomcat 
+  shell: chdir=/usr/local/tomcat/bin sh ./startup.sh

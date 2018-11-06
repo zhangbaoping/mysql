@@ -35,4 +35,4 @@
       copy: "src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/"
 
     - name: 解压文件
-      shell: chdir={{ data_path }}/{{ project_name }}/  unzip -d {{ data_path }}/{{ project_name }}.zip
+      shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

@@ -4,9 +4,9 @@
   tasks:
   #校验包的md5
   - name: exec shell
-    shell: echo {{ /bin/sh /package/java_package_check.sh }}
+    shell: /bin/echo {{ /bin/sh /package/java_package_check.sh }}
 
-  # 检查环境变量是否存在jdk的配置，并定义变量result
+  # 检查环境变量是否存在jdk的配置，并定义变量result/bi
   - name: check jdk variable 
     shell: cat /etc/profile
     register: result

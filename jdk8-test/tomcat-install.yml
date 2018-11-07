@@ -45,7 +45,8 @@
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name}}
 
     - name: delete current package
-      shell: rm -rf {{ project_data_path }}/{{ project_name }} && rm -rf {{ project_data_path }}/{{ project_name }}.zip
+      #shell: rm -rf {{ project_data_path }}/{{ project_name }} && rm -rf {{ project_data_path }}/{{ project_name }}.zip
+      shell: rm -rf {{ project_data_path }}/{{ project_name }}
 
     - name: copy new package to dest host 
       file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/

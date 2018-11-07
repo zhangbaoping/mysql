@@ -64,7 +64,7 @@
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
     - name: check service start status
-      wait_for: port={{ service_run_port }} delay=5 timeout=30
+      wait_for: port={{ service_run_port }} delay=5 timeout=90
 
     - name: service start successful
       shell: echo "Start Successful !!!"

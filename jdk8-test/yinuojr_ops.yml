@@ -63,7 +63,7 @@
     - name: start java service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
-    - name: check service start status
+    - name: check service port status
       wait_for: port={{ service_run_port }} delay=5 timeout=120
 
     - name: service start

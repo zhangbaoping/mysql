@@ -24,14 +24,14 @@
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
 
-    - wait_for: "{{ src_host_path }}/"
-    - wait_for: "{{ dst_host_path }}/"
-    - wait_for: "{{ project_backup_path }}/"
-    - wait_for: "{{ project_name }}/"
-    - wait_for: "{{ project_data_path }}/"
-    - wait_for: "{{ service_run_port }}"
-    - wait_for: "{{ src_package_host_ip }}"
-    - wait_for: "{{ dst_package_host_ip }}"
+    #- wait_for: "{{ src_host_path }}/"
+    #- wait_for: "{{ dst_host_path }}/"
+    #- wait_for: "{{ project_backup_path }}/"
+    #- wait_for: "{{ project_name }}/"
+    #- wait_for: "{{ project_data_path }}/"
+    #- wait_for: "{{ service_run_port }}"
+    #- wait_for: "{{ src_package_host_ip }}"
+    #- wait_for: "{{ dst_package_host_ip }}"
 
     - name: scp java package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
@@ -65,8 +65,8 @@
 
     - name: delete current package
       shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
-    - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
-    - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
+    #- wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+    #- wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
     - name: copy new package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no

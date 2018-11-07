@@ -20,10 +20,10 @@
         - "{{ data_path }}/"
 
     - name: debug md5sum
-      command: "sshpass  -pbubi ssh  -o StrictHostKeyChecking=no root@192.168.2.40  'ls -l /home/jekins/.jenkins/workspace/test-yinuojr-gateway/target/yinuojr-gateway.zip;md5sum  /home/jekins/.jenkins/workspace/test-yinuojr-gateway/target/yinuojr-gateway.zip'"    
+      command: "sshpass -pbubi ssh -o StrictHostKeyChecking=no root@192.168.2.110 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum  /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"    
 		  register: check_out
-    - debug: msg={{check_out.stdout_lines}}
-    
+    - debug: msg={{ check_out.stdout_lines }}
+
     - name: 停止运行的java服务
       shell: chdir={{ data_path }}/{{ project_name }}/bin/ sh launch stop 
 

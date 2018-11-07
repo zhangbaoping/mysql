@@ -7,7 +7,7 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
-    run_port: 32000
+    project_run_port: 32000
     source_package_host_ip: 192.168.2.100
     
   tasks:
@@ -18,7 +18,9 @@
         - "{{ remote_host_file }}/"
         - "{{ project_backup_path }}/"
         - "{{ project_name }}/"
-        - "{{ data_path }}/"
+        - "{{ project_data_path }}/"
+        - "{{ project_run_port }}"
+        - "{{ source_package_host_ip }}"
 
     - name: from remote host scp java package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:{{ remote_host_file }}/{{ project_name }}.zip {{ local_host_file }}"  

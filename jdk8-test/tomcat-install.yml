@@ -10,7 +10,6 @@
     run_port: 32000
     source_package_host_ip: 192.168.2.100
     
-
   tasks:
     - name: 创建变量对应的目录
       file: path={{ item }} state=directory

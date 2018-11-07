@@ -20,7 +20,7 @@
         - "{{ data_path }}/"
 
     - name: debug md5sum
-      command: "sshpass -pbubi ssh -o StrictHostKeyChecking=no root@192.168.2.110 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum  /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"    
+      command: "sshpass -pbubi ssh -o StrictHostKeyChecking=no root@192.168.2.110 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum  /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
 		  register: check_out
     - debug: msg={{ check_out.stdout_lines }}
 

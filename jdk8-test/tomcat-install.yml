@@ -2,13 +2,13 @@
 - hosts: 192.168.6.123
   dest_user: root
   vars:
-    src_host_path: /root/.jenkins/workspace/pre-yinuojr-evidence/target
-    dst_host_path: /data/backup/pre-yinuojr-evidence/target
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
+    dst_host_path: /data/backup/yinuojr-ops/target
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
-    project_name: yinuojr-evidence
-    service_run_port: 32000
-    src_package_host_ip: 192.168.2.110
+    project_name: yinuojr-ops
+    service_run_port: 21019
+    src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
     
   tasks:
@@ -56,8 +56,8 @@
     - name: start java service
       shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start
 
-    #- name: check service start status
-    #  wait_for: port={{ service_run_port }} delay=1 timeout=10
+    - name: check service start status
+      wait_for: port={{ service_run_port }} delay=3 timeout=30
 
-    #- name: service start successful
-    #  shell: echo "Start Successful !!!"
+    - name: service start successful
+      shell: echo "Start Successful !!!"

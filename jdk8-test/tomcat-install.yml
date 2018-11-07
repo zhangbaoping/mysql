@@ -3,7 +3,7 @@
   remote_user: root
   vars:
     local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
-    remote_host_file: /package/pre-yinuojr-evidence/target
+    remote_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
     data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
@@ -21,15 +21,15 @@
         - "{{ data_path }}/"
 
     - name: from remote host scp java package to local host
-      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:/root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip /root/.jenkins/workspace/pre-yinuojr-evidence/target/"  
+      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:{{ remote_host_file }}/{{ project_name }}.zip {{ local_host_file }}"  
   
     - name: check local package md5sum
-      command: "sshpass -pbubi ssh root@192.168.2.110 'ls -lrt /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
+      command: "sshpass -pbubi ssh root@192.168.2.110 'ls -lrt {{ remote_host_file }}/{{ project_name }}.zip;md5sum {{ remote_host_file }}/{{ project_name }}.zip'"
       register: check_scp
     - debug: msg={{check_scp.stdout_lines}}
   
     - name: md5sum local
-      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -lrt /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
+      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -lrt {{ local_host_file }}/{{ project_name }}.zip;md5sum {{ local_host_file }}/{{ project_name }}.zip'"
       register: check_local
     - debug: msg={{check_local.stdout_lines}}
 

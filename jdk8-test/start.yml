@@ -3,4 +3,4 @@
   
   tasks: 
   - name: tomcat stop
-    shell: chdir=/bubidata/server/data/yinuojr-ops/bin nohup ./launch start
+    shell: chdir=/bubidata/server/data/yinuojr-ops/bin sh ./launch stop

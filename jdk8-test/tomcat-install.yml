@@ -46,7 +46,7 @@
     - debug: msg="{{check_out_ops.stdout_lines}}"
 
     - name: stop java service
-      shell: source /etc/profile && chdir={{ project_data_path }}/{{ project_name }}/bin/ && ./launch stop
+      shell: source /etc/profile && chdir={{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 
     - name: check service stop 
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10

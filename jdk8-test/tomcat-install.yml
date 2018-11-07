@@ -58,7 +58,7 @@
       shell: cd {{ project_data_path }} && rm -rf {{ project_name }}
 
     - name: copy new package to dst host and unzip 
-      unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start java service
       shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start

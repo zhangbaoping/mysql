@@ -1,0 +1,5 @@
+---
+- include: install_ops.yml
+  tags: yinuojr_ops
+- include: install_oss.yml
+  tags: yinuojr_oss

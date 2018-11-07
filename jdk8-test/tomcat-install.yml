@@ -19,10 +19,18 @@
         - "{{ project_name }}/"
         - "{{ data_path }}/"
 
-    - name: debug md5sum
-      command: "sshpass -pbubi ssh -o StrictHostKeyChecking=no root@192.168.2.110 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum  /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
-		  register: check_out
-    - debug: msg={{ check_out.stdout_lines }}
+    - name: scp package
+      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:/root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip /root/.jenkins/workspace/pre-yinuojr-evidence/target/"  
+  
+    - name: md5sum check
+      command: "sshpass -pbubi ssh root@192.168.2.110 'ls -lrt /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
+      register: check_scp
+    - debug: msg={{check_scp.stdout_lines}}
+  
+    - name: md5sum local
+      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
+      register: check_local
+    - debug: msg={{check_local.stdout_lines}}
 
     - name: 停止运行的java服务
       shell: chdir={{ data_path }}/{{ project_name }}/bin/ sh launch stop 

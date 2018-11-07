@@ -45,17 +45,16 @@
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name}}
 
     - name: delete current package
-      #shell: rm -rf {{ project_data_path }}/{{ project_name }} && rm -rf {{ project_data_path }}/{{ project_name }}.zip
       shell: rm -rf {{ project_data_path }}/{{ project_name }}
 
     - name: copy new package to dest host and zip 
       unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start java service
-      shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ sh launch start
+      shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start
 
-    - name: waitting service start
-      wait_for: port={{ service_run_port }} delay=5 timeout=30
+    - name: check service start status
+      wait_for: port={{ service_run_port }} delay=1 timeout=10
 
-    - name: service start successful
-      shell: echo "Restart Successful !!!"
+    - name: service start status
+      shell: echo "Start Successful !!!"

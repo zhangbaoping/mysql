@@ -49,7 +49,7 @@
       shell: rm -rf {{ project_data_path }}/{{ project_name }}
 
     - name: copy new package to dest host and zip 
-      - unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+      unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     #- name: unzip java package
     #  shell: chdir={{ project_data_path }}/{{ project_name }}/  unzip {{ project_data_path }}/{{ project_name }}.zip

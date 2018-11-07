@@ -2,8 +2,6 @@
 - hosts: 192.168.6.123
   
   tasks: 
-  - name: source config
-    shell: source /etc/profile
 
   - name: tomcat start
-    shell: chdir=/bubidata/server/data/yinuojr-ops/bin  ./launch start
+    shell: source /etc/profile ; cd /bubidata/server/data/yinuojr-ops/bin ; ./launch start

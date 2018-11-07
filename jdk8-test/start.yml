@@ -1,6 +1,6 @@
 ---
 - hosts: 192.168.6.123
   tasks:
-  
+
     - name: start java service
-      command: "chdir={{ project_data_path }}/{{ project_name }}/bin  'sh launch start'"
+      command: "chdir=/bubidata/server/data/yinuojr-ops/bin  'sh launch start'"

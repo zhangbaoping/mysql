@@ -3,4 +3,4 @@
   tasks:
 
     - name: start java service
-      command: "cd /bubidata/server/data/yinuojr-ops/bin  ./launch start"
+      command: "chdir=/bubidata/server/data/yinuojr-ops/bin  'sh launch start'"

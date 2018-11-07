@@ -8,6 +8,8 @@
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
     run_port: 32000
+    source_package_host_ip: 192.168.2.100
+    
 
   tasks:
     - name: 创建变量对应的目录
@@ -19,10 +21,10 @@
         - "{{ project_name }}/"
         - "{{ data_path }}/"
 
-    - name: scp package
+    - name: from remote host scp java package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:/root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip /root/.jenkins/workspace/pre-yinuojr-evidence/target/"  
   
-    - name: md5sum check
+    - name: check local package md5sum
       command: "sshpass -pbubi ssh root@192.168.2.110 'ls -lrt /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
       register: check_scp
     - debug: msg={{check_scp.stdout_lines}}
@@ -44,9 +46,9 @@
     - name: 删除服务包
       shell: rm -rf {{ data_path }}/{{ project_name }} && rm -rf {{ data_path }}/{{ project_name }}.zip
 
-    - name: 拷贝新版java服务包并解压
+    #- name: 拷贝新版java服务包并解压
       #copy: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
-      file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
+      #file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
 
     - name: 解压文件
       shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

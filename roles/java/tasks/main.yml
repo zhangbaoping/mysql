@@ -1,12 +1,70 @@
-- name: 将tomcat压缩包copy到远程主机 apache-tomcat-7.0.63.zip
-  copy: src=apache-tomcat-{{ tomcat_version }}.zip dest=/data
-- name: 解压tomcat压缩包apache-tomcat-7.0.63.zip
-  shell: cd /data && unzip apache-tomcat-{{ tomcat_version }}.zip
-- name: 将tomcat压缩包 重新命名为 tomcat
-  file: src=/data/apache-tomcat-{{ tomcat_version }} dest=/data/tomcat state=link
-- name: add /etc/profile
-  shell: chdir=/data/tomcat/bin sed -i '1a source /etc/profile' startup.sh
-- name: 首次启动tomcat
-  shell: chdir=/data/tomcat/bin nohup ./catalina.sh start &
-- name: remove apache-tomcat-7.0.63.zip
-  file: path=/data/apache-tomcat-{{ tomcat_version }}.zip state=absent
+---
+- hosts: 192.168.6.123
+  remote_user: root
+  vars:
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
+    dst_host_path: /data/backup/yinuojr-ops/target
+    project_data_path: /bubidata/server/data
+    project_backup_path: /data/backup
+    project_name: yinuojr-ops
+    service_run_port: 21019
+    src_package_host_ip: 192.168.2.40
+    dst_package_host_ip: 192.168.6.123
+    
+  tasks:
+    - name: create directory
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ src_host_path }}/"
+        - "{{ dst_host_path }}/"
+        - "{{ project_backup_path }}/"
+        - "{{ project_name }}/"
+        - "{{ project_data_path }}/"
+        - "{{ service_run_port }}"
+        - "{{ src_package_host_ip }}"
+        - "{{ dst_package_host_ip }}"
+
+    - name: scp java package to local host
+      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
+  
+    - name: check scp package md5sum
+      command: "sshpass -pbubi ssh root@{{ dst_package_host_ip }} 'ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip'"
+      register: check_scp_package
+    - debug: msg={{check_scp_package.stdout_lines}}
+  
+    - name: md5sum src package
+      command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
+      register: check_src_package
+    - debug: msg={{check_src_package.stdout_lines}}
+
+    - name: add exec permission
+      shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
+
+    - name: check service exists or not
+      shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
+      register: check_out_ops
+    - debug: msg="{{check_out_ops.stdout_lines}}"
+
+    - name: stop java service
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
+
+    - name: check service stop 
+      wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
+
+    - name: backup current java package 
+      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
+
+    - name: delete current package
+      shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
+
+    - name: copy new package to dst host and unzip 
+      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+
+    - name: start java service
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
+
+    - name: check service start status
+      wait_for: port={{ service_run_port }} delay=5 timeout=120
+
+    - name: service start
+      shell: echo "Start Successful !!!"

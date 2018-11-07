@@ -51,10 +51,10 @@
       unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start java service
-      shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start
+      shell: cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
-    - name: check service start status
-      wait_for: port={{ service_run_port }} delay=1 timeout=10
+    #- name: check service start status
+    #  wait_for: port={{ service_run_port }} delay=1 timeout=10
 
-    - name: service start status
-      shell: echo "Start Successful !!!"
+    #- name: service start successful
+    #  shell: echo "Start Successful !!!"

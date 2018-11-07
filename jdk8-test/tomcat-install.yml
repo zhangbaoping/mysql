@@ -37,10 +37,13 @@
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
 
+    - name: add exec permission
+      shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
+
     - name: check service exists or not
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
       register: check_out_ops
-    - debug: msg="check ops service {{check_out_ops.stdout}}"
+    - debug: msg="{{check_out_ops.stdout_lines}}"
 
     - name: stop java service
       shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ sh launch stop 

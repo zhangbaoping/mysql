@@ -1,39 +1,42 @@
 ---
 - hosts: 192.168.6.123
-  remote_user: root
+  dest_user: root
   vars:
-    local_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
-    remote_host_file: /root/.jenkins/workspace/pre-yinuojr-evidence/target
+    src_host_path: /root/.jenkins/workspace/pre-yinuojr-evidence/target
+    dst_host_path: /data/backup/pre-yinuojr-evidence/target
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-evidence
     service_run_port: 32000
-    source_package_host_ip: 192.168.2.100
+    src_package_host_ip: 192.168.2.110
+    dst_package_host_ip: 192.168.6.123
     
   tasks:
     - name: create directory
       file: path={{ item }} state=directory
       with_items:
-        - "{{ local_host_file }}/"
-        - "{{ remote_host_file }}/"
+        - "{{ src_host_path }}/"
+        - "{{ dst_host_path }}/"
         - "{{ project_backup_path }}/"
         - "{{ project_name }}/"
         - "{{ project_data_path }}/"
         - "{{ service_run_port }}"
-        - "{{ source_package_host_ip }}"
+        - "{{ src_package_host_ip }}"
+        - "{{ dst_package_host_ip }}"
 
-    - name: from remote host scp java package to local host
-      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@192.168.2.110:{{ remote_host_file }}/{{ project_name }}.zip {{ local_host_file }}"  
+    - name: scp java package to local host
+      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
   
-    - name: check local package md5sum
-      command: "sshpass -pbubi ssh root@192.168.2.110 'ls -lrt {{ remote_host_file }}/{{ project_name }}.zip;md5sum {{ remote_host_file }}/{{ project_name }}.zip'"
-      register: check_scp
-    - debug: msg={{check_scp.stdout_lines}}
+    - name: check scp package md5sum
+      #command: "sshpass -pbubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip'"
+      command: "ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip"
+      register: check_scp_package
+    - debug: msg={{check_scp_package.stdout_lines}}
   
-    - name: md5sum local
-      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -lrt {{ local_host_file }}/{{ project_name }}.zip;md5sum {{ local_host_file }}/{{ project_name }}.zip'"
-      register: check_local
-    - debug: msg={{check_local.stdout_lines}}
+    - name: md5sum src package
+      command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
+      register: check_src_package
+    - debug: msg={{check_src_package.stdout_lines}}
 
     - name: stop java service
       shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ sh launch stop 
@@ -47,11 +50,11 @@
     - name: delete current package
       shell: rm -rf {{ project_data_path }}/{{ project_name }}
 
-    - name: copy new package to dest host and zip 
-      unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+    - name: copy new package to dst host and unzip 
+      unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start java service
-      shell: cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
+      shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start
 
     #- name: check service start status
     #  wait_for: port={{ service_run_port }} delay=1 timeout=10

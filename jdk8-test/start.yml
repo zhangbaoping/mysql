@@ -5,5 +5,5 @@
   - name: source config
     shell: source /etc/profile
 
-  - name: tomcat stop
+  - name: tomcat start
     shell: chdir=/bubidata/server/data/yinuojr-ops/bin  ./launch start

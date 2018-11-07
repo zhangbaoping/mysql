@@ -57,5 +57,5 @@
     - name: waitting service start
       wait_for: port={{ service_run_port }} delay=5 timeout=30
 
-    - name: service start Successful
+    - name: service start successful
       shell: echo "Restart Successful !!!"

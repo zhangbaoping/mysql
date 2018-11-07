@@ -66,5 +66,5 @@
     - name: check service start status
       wait_for: port={{ service_run_port }} delay=5 timeout=60
 
-    - name: service start successful
+    - name: service start
       shell: echo "Start Successful !!!"

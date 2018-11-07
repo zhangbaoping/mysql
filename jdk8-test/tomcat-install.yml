@@ -51,5 +51,11 @@
     - name: copy new package to dest host and zip 
       unarchive: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
-    #- name: unzip java package
-    #  shell: chdir={{ project_data_path }}/{{ project_name }}/  unzip {{ project_data_path }}/{{ project_name }}.zip
+    - name: start java service
+      shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ sh launch start
+
+    - name: waitting service start
+      wait_for: port={{ service_run_port }} delay=5 timeout=30
+
+    - name: service start end
+      shell: echo "Restart Successful !!!"

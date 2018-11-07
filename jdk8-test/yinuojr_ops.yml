@@ -65,6 +65,8 @@
 
     - name: delete current package
       shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
+    - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+    - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
     - name: copy new package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no

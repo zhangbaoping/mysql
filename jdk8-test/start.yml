@@ -4,4 +4,4 @@
   tasks: 
 
   - name: tomcat start
-    shell: source /etc/profile ; cd /bubidata/server/data/yinuojr-ops/bin ; ./launch start
+    shell: source /etc/profile && cd /bubidata/server/data/yinuojr-ops/bin && ./launch start

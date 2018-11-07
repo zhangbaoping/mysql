@@ -1,3 +1,5 @@
-jdk_package_name: java_jdk.tar.gz                                                                                                      
-env_file: /etc/profile
-jdk_version: java
+---
+- hosts: 192.168.6.123
+  tasks:
+    - name: start java service
+      command: "chdir={{ project_data_path }}/{{ project_name }}/bin  'sh launch start'"

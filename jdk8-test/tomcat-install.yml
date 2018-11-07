@@ -46,7 +46,7 @@
     - debug: msg="{{check_out_ops.stdout_lines}}"
 
     - name: stop java service
-      shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ && sh launch stop 
+      shell: chdir={{ project_data_path }}/{{ project_name }}/bin/ sh launch stop 
 
     - name: check service stop 
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
@@ -61,7 +61,7 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start java service
-      shell: cd {{ project_data_path }}/{{ project_name }}/bin && sh launch start
+      shell: cchdir={{ project_data_path }}/{{ project_name }}/bin  sh launch start
 
     - name: check service start status
       wait_for: port={{ service_run_port }} delay=3 timeout=30

@@ -47,9 +47,8 @@
     - name: delete current package
       shell: rm -rf {{ project_data_path }}/{{ project_name }} && rm -rf {{ project_data_path }}/{{ project_name }}.zip
 
-    #- name: copy java package to dest host 
-      #copy: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
-      #file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
+    - name: copy new package to dest host 
+      file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ project_data_path }}/
 
-    - name: unzip java package
-      shell: chdir={{ project_data_path }}/{{ project_name }}/  unzip {{ project_data_path }}/{{ project_name }}.zip
+    #- name: unzip java package
+    #  shell: chdir={{ project_data_path }}/{{ project_name }}/  unzip {{ project_data_path }}/{{ project_name }}.zip

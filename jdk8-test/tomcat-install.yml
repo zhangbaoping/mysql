@@ -33,21 +33,21 @@
       register: check_local
     - debug: msg={{check_local.stdout_lines}}
 
-    - name: 停止运行的java服务
+    - name: stop java service
       shell: chdir={{ data_path }}/{{ project_name }}/bin/ sh launch stop 
 
-    - name: 验证服务是否关闭
+    - name: check service stop 
       wait_for: port={{ run_port }} delay=3 state=stopped timeout=10
 
-    - name: 备份现有旧的服务包
+    - name: backup current java package 
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ data_path }}/{{ project_name}}
 
-    - name: 删除服务包
+    - name: delete current package
       shell: rm -rf {{ data_path }}/{{ project_name }} && rm -rf {{ data_path }}/{{ project_name }}.zip
 
-    #- name: 拷贝新版java服务包并解压
+    #- name: copy java package to dest host 
       #copy: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
       #file: src={{ local_host_file }}/{{ project_name }}.zip dest={{ data_path }}/
 
-    - name: 解压文件
+    - name: unzip java package
       shell: chdir={{ data_path }}/{{ project_name }}/  unzip {{ data_path }}/{{ project_name }}.zip

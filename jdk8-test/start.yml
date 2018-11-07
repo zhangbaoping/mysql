@@ -2,5 +2,5 @@
 - hosts: 192.168.6.123
   
   tasks: 
-  - name: tomcat start
-    shell: cd /bubidata/server/data/yinuojr-ops/bin sh launch start 
+  - name: tomcat stop
+    shell: cd /bubidata/server/data/yinuojr-ops/bin sh launch stop

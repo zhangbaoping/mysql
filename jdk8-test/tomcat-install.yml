@@ -64,7 +64,7 @@
       shell: chdir={{ project_data_path }}/{{ project_name }}/bin  sh launch start
 
     - name: check service start status
-      wait_for: port={{ service_run_port }} delay=3 timeout=30
+      wait_for: port={{ service_run_port }} delay=5 timeout=30
 
     - name: service start successful
       shell: echo "Start Successful !!!"

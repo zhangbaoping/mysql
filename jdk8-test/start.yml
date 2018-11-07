@@ -2,5 +2,8 @@
 - hosts: 192.168.6.123
   
   tasks: 
+  - name: source config
+    shell: source /etc/profile
+
   - name: tomcat stop
-    shell: chdir=/bubidata/server/data/yinuojr-ops/bin nohup ./launch start & 
+    shell: chdir=/bubidata/server/data/yinuojr-ops/bin  ./launch start

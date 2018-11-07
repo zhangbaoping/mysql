@@ -29,7 +29,7 @@
     - debug: msg={{check_scp.stdout_lines}}
   
     - name: md5sum local
-      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -l /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
+      command: "sshpass -p bubi ssh root@192.168.6.123 'ls -lrt /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip;md5sum /root/.jenkins/workspace/pre-yinuojr-evidence/target/yinuojr-evidence.zip'"
       register: check_local
     - debug: msg={{check_local.stdout_lines}}
 

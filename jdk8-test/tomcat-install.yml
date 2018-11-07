@@ -52,7 +52,7 @@
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
     - name: backup current java package 
-      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name}}
+      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
 
     - name: delete current package
       shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip

@@ -1,6 +1,5 @@
 ---
 - hosts: 192.168.6.123
   tasks:
-
     - name: start java service
       command: "chdir=/bubidata/server/data/yinuojr-ops/bin  'sh launch start'"

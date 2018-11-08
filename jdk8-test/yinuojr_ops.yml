@@ -23,10 +23,13 @@
         - "{{ project_data_path }}"
 
     - wait_for: path={{ src_host_path }} state=present
-    - wait_for: path={{ dst_host_path }} state=present
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
+
+    - name: create directory
+      shell: mkdir -p {{ dst_host_path }}
+    - wait_for: path={{ dst_host_path }} state=present
 
     - name: scp yinuojr_ops package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
@@ -49,7 +52,7 @@
     - name: stop yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 
-    - name: check yinuojr_ops service stop 
+    - name: check yinuojr_ops service stop
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
     - name: backup yinuojr_ops package 

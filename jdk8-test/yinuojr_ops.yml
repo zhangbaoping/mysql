@@ -37,7 +37,7 @@
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
   
     - name: check scp package md5sum
-      command: "md5sum {{ dst_host_path }}/{{ project_name }}.zip"
+      command: "ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip"
       register: check_scp_package
     - debug: msg={{check_scp_package.stdout_lines}}
   

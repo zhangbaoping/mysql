@@ -20,7 +20,7 @@
       shell: mkdir -p {{ localhost_host_path }}
 
     - name: scp src yinuojr-discovery package to localhost
-      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
+      command: "sshpass -pbubi scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
 
     - name: check scp package md5sum to localhost
       command: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip"

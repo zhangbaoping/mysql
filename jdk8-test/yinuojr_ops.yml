@@ -48,7 +48,7 @@
 
     #- name: add exec permission
     #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
-
+    
     - name: check service status
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
       register: check_out_ops

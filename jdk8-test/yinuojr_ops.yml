@@ -7,10 +7,9 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-ops
-    project_jdk_path: /bubidata/server
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
-    dst_package_host_ip: 192.168.6.123
+    dst_package_host_ip: 192.168.5.100
     
   tasks:
     - name: create directory
@@ -21,7 +20,6 @@
         - "{{ project_backup_path }}"
         - "{{ project_name }}"
         - "{{ project_data_path }}"
-        - "{{ project_jdk_path }}"
         - "{{ service_run_port }}"
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
@@ -31,31 +29,9 @@
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
-    - wait_for: path={{ project_jdk_path }} state=present
     - wait_for: path={{ service_run_port }} state=present
     - wait_for: path={{ src_package_host_ip }} state=present
     - wait_for: path={{ dst_package_host_ip }} state=present
-
-    - name: check jdk variable 
-      shell: cat /etc/profile
-      register: result
-
-    - name: copy jdk remote hosts
-      copy: src=/package/java_jdk.tar.gz dest={{ project_jdk_path }}
-
-    - name: tar xvf java_jdk.tar.gz
-      shell: chdir={{ project_jdk_path }} tar zxf java_jdk.tar.gz
-
-    - name: java_profile config
-      shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
-      when: result.stdout.find('JAVA_HOME') == -1
-      with_items:
-        - export JAVA_HOME={{ project_jdk_path }}/java
-        - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
-        - export PATH=\$JAVA_HOME/bin:\$PATH
-
-    - name: source profile
-      shell: source /etc/profile
 
     - name: scp yinuojr_ops package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
@@ -73,7 +49,7 @@
     #- name: add exec permission
     #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
 
-    - name: check service exists or not
+    - name: check service status
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
       register: check_out_ops
     - debug: msg="{{check_out_ops.stdout_lines}}"
@@ -89,7 +65,7 @@
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
 
     - name: copy yinuojr_ops package to dst host and unzip 
-      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ dst_package_host_ip }}/{{ project_data_path }}/
 
     - name: start yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

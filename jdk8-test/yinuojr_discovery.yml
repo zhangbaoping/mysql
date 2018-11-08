@@ -52,7 +52,7 @@
     - name: check yinuojr_discovery service stop 
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
-    - name: backup current java yinuojr_discovery package 
+    - name: backup current yinuojr_discovery package 
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
 
     - name: delete current package
@@ -60,7 +60,7 @@
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
     - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
-    - name: copy new package to dst host and unzip 
+    - name: copy yinuojr_discovery package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start yinuojr_discovery service

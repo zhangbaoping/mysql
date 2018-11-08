@@ -24,14 +24,14 @@
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
 
-    - wait_for: "{{ src_host_path }}" state=started
-    - wait_for: "{{ dst_host_path }}" state=started
-    - wait_for: "{{ project_backup_path }}" state=started
-    - wait_for: "{{ project_name }}" state=started
-    - wait_for: "{{ project_data_path }}" state=started
-    - wait_for: "{{ service_run_port }}" state=started
-    - wait_for: "{{ src_package_host_ip }}" state=started
-    - wait_for: "{{ dst_package_host_ip }}" state=started
+    - wait_for: path={{ src_host_path }} state=present
+    - wait_for: path={{ dst_host_path }} state=present
+    - wait_for: path={{ project_backup_path }} state=present
+    - wait_for: path={{ project_name }} state=present
+    - wait_for: path={{ project_data_path }} state=present
+    - wait_for: path={{ service_run_port }} state=present
+    - wait_for: path={{ src_package_host_ip }} state=present
+    - wait_for: path={{ dst_package_host_ip }} state=present
 
     - name: scp java package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  

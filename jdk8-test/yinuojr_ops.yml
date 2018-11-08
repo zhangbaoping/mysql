@@ -70,8 +70,8 @@
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
 
-    - name: add exec permission
-      shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
+    #- name: add exec permission
+    #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
 
     - name: check service exists or not
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
@@ -81,18 +81,14 @@
     - name: stop yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 
-    - name: check service stop 
+    - name: check yinuojr_ops service stop 
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
-    - name: backup current yinuojr_ops package 
-      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
-
-    - name: delete current package
-      shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
+    - name: backup yinuojr_ops package 
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}} 
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
-    - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
-    - name: copy new package to dst host and unzip 
+    - name: copy yinuojr_ops package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
     - name: start yinuojr_ops service

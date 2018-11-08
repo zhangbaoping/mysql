@@ -9,7 +9,7 @@
     project_name: yinuojr-ops
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
-    dst_package_host_ip: 192.168.5.100
+    dst_package_host_ip: 192.168.6.123
     date_time: date +"%Y%m%d%H%M%S"
     
   tasks:
@@ -23,19 +23,16 @@
         - "{{ project_data_path }}"
 
     - wait_for: path={{ src_host_path }} state=present
+    - wait_for: path={{ dst_host_path }} state=present
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
-
-    - name: create directory
-      shell: mkdir -p {{ dst_host_path }}
-    - wait_for: path={{ dst_host_path }} state=present
 
     - name: scp yinuojr_ops package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
   
     - name: check scp package md5sum
-      command: "md5sum {{ dst_host_path }}/{{ project_name }}.zip"
+      command: "sshpass -p bubi ssh root@{{ dst_package_host_ip }} ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip"
       register: check_scp_package
     - debug: msg={{check_scp_package.stdout_lines}}
   
@@ -55,12 +52,16 @@
     - name: check yinuojr_ops service stop
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
+    - name: delete package
+      shell: rm -rf {{ project_backup_path }}/{{ project_name}} 
+
     - name: backup yinuojr_ops package 
       shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
 
-    - name: copy yinuojr_ops package to dst host and unzip 
-      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
+    - name: unarchive yinuojr_ops package
+      #unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
+      shell: cd {{ project_data_path }} && unzip {{ project_name }}.zip
 
     - name: start yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

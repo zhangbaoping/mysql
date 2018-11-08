@@ -33,6 +33,32 @@
     - wait_for: path={{ src_package_host_ip }} state=present
     - wait_for: path={{ dst_package_host_ip }} state=present
 
+    # check jdk bash
+    - name: check jdk variable 
+      shell: cat /etc/profile
+      register: result
+
+    # copy jdk package to dest host
+    - name: copy jdk remote hosts
+      copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+
+    # unarchive jdk package
+    - name: tar xvf java_jdk.tar.gz
+      shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
+
+    # modify /etc/profile
+    - name: java_profile config
+      shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
+      when: result.stdout.find('JAVA_HOME') == -1
+      with_items:
+        - export JAVA_HOME=/bubidata/server/java
+        - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
+        - export PATH=\$JAVA_HOME/bin:\$PATH
+
+    # source /etc/profile
+    - name: source profile
+      shell: source /etc/profile
+
     - name: scp yinuojr_ops package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
   

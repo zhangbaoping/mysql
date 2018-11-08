@@ -24,7 +24,6 @@
         - "{{ service_run_port }}"
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
-        - "{{ date_time }}"
 
     - wait_for: path={{ src_host_path }} state=present
     - wait_for: path={{ dst_host_path }} state=present
@@ -63,8 +62,8 @@
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
     - name: backup yinuojr_ops package 
-      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}_{{ date_time }} 
-    - wait_for: path={{ project_data_path }}/{{ project_name }}.{{ date_time }} state=absent
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}
+    - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
 
     - name: copy yinuojr_ops package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}

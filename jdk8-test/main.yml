@@ -1,5 +1,5 @@
 ---
-- include: yinuojr_ops.yml
+- import-playbook: yinuojr_ops.yml
   tags: yinuojr_ops
-- include: yinuojr_discovery.yml
+- import-playbook: yinuojr_discovery.yml
   tags: yinuojr_discovery

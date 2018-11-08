@@ -7,7 +7,7 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-discovery
-    service_run_port: 21019
+    service_run_port: 11009
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
     

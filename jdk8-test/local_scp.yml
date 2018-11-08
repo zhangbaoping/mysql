@@ -19,5 +19,12 @@
     - name: scp src yinuojr-discovery package to localhost
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
 
-    - name: check yinuojr-discovery package
-      shell: cd {{ localhost_host_path }} ; ls -lrt {{ yinuojr-discovery }}.zip
+    - name: check scp package md5sum to localhost
+      command: "sshpass -p bubi ssh root@{{ localhost_host_path }} ls -lrt {{ localhost_host_path }}/{{ project_name }}.zip;md5sum {{ localhost_host_path }}/{{ project_name }}.zip"
+      register: check_scp_package
+    - debug: msg={{check_scp_package.stdout_lines}}
+  
+    - name: md5sum src package
+      command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
+      register: check_src_package
+    - debug: msg={{check_src_package.stdout_lines}}

@@ -2,11 +2,11 @@
 - hosts: 192.168.6.123
   remote_user: root
   vars:
-    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
-    dst_host_path: /data/backup/yinuojr-ops/target
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-discovery/target
+    dst_host_path: /data/backup/yinuojr-discovery/target
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
-    project_name: yinuojr-ops
+    project_name: yinuojr-discovery
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
@@ -33,7 +33,7 @@
     - wait_for: path={{ src_package_host_ip }} state=present
     - wait_for: path={{ dst_package_host_ip }} state=present
 
-    - name: scp yinuojr_ops package to local host
+    - name: scp yinuojr_discovery package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
   
     - name: check scp package md5sum
@@ -41,7 +41,7 @@
       register: check_scp_package
     - debug: msg={{check_scp_package.stdout_lines}}
   
-    - name: md5sum src package
+    - name: md5sum src yinuojr_discovery package
       command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
@@ -49,18 +49,18 @@
     - name: add exec permission
       shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
 
-    - name: check service exists or not
-      shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
-      register: check_out_ops
-    - debug: msg="{{check_out_ops.stdout_lines}}"
+    - name: check yinuojr_discovery service exists or not
+      shell: "ps -ef|grep discovery|grep -v grep |awk '{print $2}'"
+      register: check_out_discovery
+    - debug: msg="{{check_out_discovery.stdout_lines}}"
 
-    - name: stop yinuojr_ops service
+    - name: stop java service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 
-    - name: check service stop 
+    - name: check yinuojr_discovery service stop 
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
-    - name: backup current yinuojr_ops package 
+    - name: backup current java yinuojr_discovery package 
       shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
 
     - name: delete current package
@@ -71,11 +71,11 @@
     - name: copy new package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
 
-    - name: start yinuojr_ops service
+    - name: start yinuojr_discovery service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
-    - name: check service port status
+    - name: check yinuojr_discovery service port status
       wait_for: port={{ service_run_port }} delay=5 state=started
 
-    - name: service start
+    - name: yinuojr_discovery service start
       shell: echo "Start Successful !!!"

@@ -16,6 +16,9 @@
         - "{{ src_host_ip }}"
         - "{{ project_name }}"
 
+    - name: create directory
+      shell: mkdir -p {{ localhost_host_path }}
+
     - name: scp src yinuojr-discovery package to localhost
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
 

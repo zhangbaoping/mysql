@@ -21,18 +21,12 @@
         - "{{ project_backup_path }}"
         - "{{ project_name }}"
         - "{{ project_data_path }}"
-        - "{{ service_run_port }}"
-        - "{{ src_package_host_ip }}"
-        - "{{ dst_package_host_ip }}"
 
     - wait_for: path={{ src_host_path }} state=present
     - wait_for: path={{ dst_host_path }} state=present
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
-    - wait_for: path={{ service_run_port }} state=present
-    - wait_for: path={{ src_package_host_ip }} state=present
-    - wait_for: path={{ dst_package_host_ip }} state=present
 
     - name: scp yinuojr_discovery package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
@@ -46,9 +40,6 @@
       command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
-
-    #- name: add exec permission
-    #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
 
     - name: check yinuojr_discovery service status
       shell: "ps -ef|grep discovery|grep -v grep |awk '{print $2}'"

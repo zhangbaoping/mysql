@@ -7,9 +7,11 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-discovery
+    project_jdk_path: /bubidata/server
     service_run_port: 11009
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
+    
     
   tasks:
     - name: create directory
@@ -20,6 +22,7 @@
         - "{{ project_backup_path }}"
         - "{{ project_name }}"
         - "{{ project_data_path }}"
+        - "{{ project_jdk_path }}"
         - "{{ service_run_port }}"
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
@@ -29,6 +32,7 @@
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
+    - wait_for: path={{ project_jdk_path }} state=present
     - wait_for: path={{ service_run_port }} state=present
     - wait_for: path={{ src_package_host_ip }} state=present
     - wait_for: path={{ dst_package_host_ip }} state=present
@@ -38,16 +42,16 @@
       register: result
 
     - name: copy jdk remote hosts
-      copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+      copy: src=/package/java_jdk.tar.gz dest={{ project_jdk_path }}
 
     - name: tar xvf java_jdk.tar.gz
-      shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
+      shell: chdir={{ project_jdk_path }} tar zxf java_jdk.tar.gz
 
     - name: java_profile config
       shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
       when: result.stdout.find('JAVA_HOME') == -1
       with_items:
-        - export JAVA_HOME=/bubidata/server/java
+        - export JAVA_HOME={{ project_jdk_path }}/java
         - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
         - export PATH=\$JAVA_HOME/bin:\$PATH
 

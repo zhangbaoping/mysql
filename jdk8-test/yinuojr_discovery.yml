@@ -7,7 +7,6 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-discovery
-    project_jdk_path: /bubidata/server
     service_run_port: 11009
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
@@ -22,7 +21,6 @@
         - "{{ project_backup_path }}"
         - "{{ project_name }}"
         - "{{ project_data_path }}"
-        - "{{ project_jdk_path }}"
         - "{{ service_run_port }}"
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
@@ -32,28 +30,9 @@
     - wait_for: path={{ project_backup_path }} state=present
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
-    - wait_for: path={{ project_jdk_path }} state=present
     - wait_for: path={{ service_run_port }} state=present
     - wait_for: path={{ src_package_host_ip }} state=present
     - wait_for: path={{ dst_package_host_ip }} state=present
-
-    - name: check jdk variable 
-      shell: cat /etc/profile
-      register: result
-
-    - name: copy jdk remote hosts
-      copy: src=/package/java_jdk.tar.gz dest={{ project_jdk_path }}
-
-    - name: tar xvf java_jdk.tar.gz
-      shell: chdir={{ project_jdk_path }} tar zxf java_jdk.tar.gz
-
-    - name: java_profile config
-      shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
-      when: result.stdout.find('JAVA_HOME') == -1
-      with_items:
-        - export JAVA_HOME={{ project_jdk_path }}/java
-        - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
-        - export PATH=\$JAVA_HOME/bin:\$PATH
 
     - name: scp yinuojr_discovery package to local host
       command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
@@ -63,20 +42,20 @@
       register: check_scp_package
     - debug: msg={{check_scp_package.stdout_lines}}
   
-    - name: md5sum src yinuojr_discovery package
+    - name: md5sum yinuojr_discovery package
       command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
 
-    - name: add exec permission
-      shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
+    #- name: add exec permission
+    #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
 
-    - name: check yinuojr_discovery service exists or not
+    - name: check yinuojr_discovery service status
       shell: "ps -ef|grep discovery|grep -v grep |awk '{print $2}'"
       register: check_out_discovery
     - debug: msg="{{check_out_discovery.stdout_lines}}"
 
-    - name: stop java service
+    - name: stop yinuojr_discovery service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 
     - name: check yinuojr_discovery service stop 

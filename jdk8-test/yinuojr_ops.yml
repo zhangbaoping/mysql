@@ -10,6 +10,7 @@
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.5.100
+    date_time: date +"%Y%m%d%H%M%S"
     
   tasks:
     - name: create directory
@@ -23,6 +24,7 @@
         - "{{ service_run_port }}"
         - "{{ src_package_host_ip }}"
         - "{{ dst_package_host_ip }}"
+        - "{{ date_time }}"
 
     - wait_for: path={{ src_host_path }} state=present
     - wait_for: path={{ dst_host_path }} state=present
@@ -48,7 +50,7 @@
 
     #- name: add exec permission
     #  shell: chmod +x {{ dst_host_path }}/{{ project_name }}.zip
-    
+
     - name: check service status
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
       register: check_out_ops
@@ -61,8 +63,8 @@
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
     - name: backup yinuojr_ops package 
-      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}} 
-    - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}.{{ date_time }} 
+    - wait_for: path={{ project_data_path }}/{{ project_name }}.{{ date_time }} state=absent
 
     - name: copy yinuojr_ops package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}

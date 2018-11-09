@@ -28,19 +28,6 @@
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
 
-    - name: scp yinuojr_ops package to local host
-      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
-  
-    - name: check scp package md5sum
-      command: "sshpass -p bubi ssh root@{{ dst_package_host_ip }} ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip"
-      register: check_scp_package
-    - debug: msg={{check_scp_package.stdout_lines}}
-  
-    - name: md5sum src package
-      command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
-      register: check_src_package
-    - debug: msg={{check_src_package.stdout_lines}}
-
     - name: check service status
       shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
       register: check_out_ops

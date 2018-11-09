@@ -76,6 +76,7 @@
     - name: backup yinuojr_ops package 
       shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+    
     - name: delete package
       shell: rm -rf {{ project_backup_path }}/{{ project_name}} 
 

@@ -5,7 +5,7 @@
     src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
     localhost_host_path: /data/backup/yinuojr-ops/target
     project_name: yinuojr-ops
-    src_host_ip: 192.168.2.40
+    src_host_ip: "{{ 192.168.2.40 }}"
     dst_host_ip: 192.168.5.100
 
   tasks:
@@ -73,12 +73,11 @@
     - name: check yinuojr_ops service stop
       wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
 
-    - name: delete package
-      shell: rm -rf {{ project_backup_path }}/{{ project_name}} 
-
     - name: backup yinuojr_ops package 
       shell: mv {{ project_data_path }}/{{ project_name }} {{ project_backup_path }}/{{ project_name}}
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+    - name: delete package
+      shell: rm -rf {{ project_backup_path }}/{{ project_name}} 
 
     - name: unarchive yinuojr_ops package
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}

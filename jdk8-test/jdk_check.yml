@@ -1,4 +1,0 @@
-- hosts: jdk-iplist
-  tasks: 
-  - name: check jdk configuration
-    shell:  /bubidata/server/java/bin/java -version

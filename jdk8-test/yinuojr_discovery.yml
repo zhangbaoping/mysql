@@ -10,6 +10,7 @@
     service_run_port: 11009
     src_host_ip: 192.168.2.40
     dst_host_ip: 192.168.6.123
+    random_number: "{{ 10000 | random }}"
     
     
   tasks:
@@ -48,7 +49,7 @@
     - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
     - name: copy yinuojr_discovery package to dst host and unzip 
-      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/ copy=no
+      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}/
 
     - name: start yinuojr_discovery service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

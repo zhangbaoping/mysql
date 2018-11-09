@@ -33,7 +33,6 @@
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
 
-
 - hosts: 192.168.6.123
   remote_user: root
   vars:

@@ -2,9 +2,9 @@
 - hosts: 192.168.5.100
   remote_user: root
   vars:
-    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
-    localhost_host_path: /data/backup/yinuojr-ops/target
-    project_name: yinuojr-ops
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-discovery/target
+    localhost_host_path: /data/backup/yinuojr-discovery/target
+    project_name: yinuojr-discovery
     src_host_ip: 192.168.2.40
     dst_host_ip: 192.168.5.100
 
@@ -20,7 +20,7 @@
     - name: create directory
       shell: mkdir -p {{ localhost_host_path }}
 
-    - name: scp src yinuojr-ops package to localhost
+    - name: scp src yinuojr-discovery package to localhost
       command: "sshpass -pbubi scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
 
     - name: check scp package md5sum to localhost

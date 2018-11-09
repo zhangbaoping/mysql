@@ -12,8 +12,4 @@
     lineinfile: dest=/etc/profile regexp="^PATH=\$PATH:\$JAVA_HOME" line="export PATH=$JAVA_HOME/bin:$PATH"
   handlers:
   - name: source profile
-    shell: source /etc/profile 
-
-    
-    #- name: 解压文件
-    #  shell: chdir={{ data_path }}/{{ project_name }}/  unzip -d {{ data_path }}/{{ project_name }}.zip 
+    shell: source /etc/profile

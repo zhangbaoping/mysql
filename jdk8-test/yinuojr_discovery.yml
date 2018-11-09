@@ -8,8 +8,8 @@
     project_backup_path: /data/backup
     project_name: yinuojr-discovery
     service_run_port: 11009
-    src_package_host_ip: 192.168.2.40
-    dst_package_host_ip: 192.168.6.123
+    src_host_ip: 192.168.2.40
+    dst_host_ip: 192.168.5.100
     
     
   tasks:
@@ -28,16 +28,16 @@
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
 
-    - name: scp yinuojr_discovery package to local host
-      command: "sshpass -pbubi scp -o StrictHostKeyChecking=no root@{{ src_package_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ dst_host_path }}"  
-  
-    - name: check scp package md5sum
-      command: "sshpass -pbubi ssh root@{{ dst_package_host_ip }} 'ls -lrt {{ dst_host_path }}/{{ project_name }}.zip;md5sum {{ dst_host_path }}/{{ project_name }}.zip'"
+    - name: scp src yinuojr-discovery package to localhost
+      command: "sshpass -pbubi scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
+
+    - name: check scp package md5sum to localhost
+      command: "ssh root@{{ dst_host_ip }} 'ls -lrt {{ localhost_host_path }}/{{ project_name }}.zip;md5sum {{ localhost_host_path }}/{{ project_name }}.zip'"
       register: check_scp_package
     - debug: msg={{check_scp_package.stdout_lines}}
   
-    - name: md5sum yinuojr_discovery package
-      command: "sshpass -p bubi ssh root@{{ src_package_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
+    - name: md5sum src package
+      command: "ssh root@{{ src_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
       register: check_src_package
     - debug: msg={{check_src_package.stdout_lines}}
 

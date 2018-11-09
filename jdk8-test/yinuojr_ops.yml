@@ -61,7 +61,6 @@
 
     - name: unarchive yinuojr_ops package
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      #shell: cd {{ project_data_path }} && unzip {{ project_name }}.zip
 
     - name: start yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

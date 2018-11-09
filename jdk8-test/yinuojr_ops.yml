@@ -1,4 +1,39 @@
 ---
+- hosts: 192.168.5.100
+  remote_user: root
+  vars:
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
+    localhost_host_path: /data/backup/yinuojr-ops/target
+    project_name: yinuojr-ops
+    src_host_ip: 192.168.2.40
+    dst_host_ip: 192.168.5.100
+
+  tasks:
+    - name: create directory
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ src_host_path }}"
+        - "{{ localhost_host_path }}"
+        - "{{ src_host_ip }}"
+        - "{{ project_name }}"
+
+    - name: create directory
+      shell: mkdir -p {{ localhost_host_path }}
+
+    - name: scp src yinuojr-ops package to localhost
+      command: "sshpass -pbubi scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
+
+    - name: check scp package md5sum to localhost
+      command: "ssh root@{{ dst_host_ip }} 'ls -lrt {{ localhost_host_path }}/{{ project_name }}.zip;md5sum {{ localhost_host_path }}/{{ project_name }}.zip'"
+      register: check_scp_package
+    - debug: msg={{check_scp_package.stdout_lines}}
+  
+    - name: md5sum src package
+      command: "ssh root@{{ src_host_ip }} 'ls -lrt {{ src_host_path }}/{{ project_name }}.zip;md5sum {{ src_host_path }}/{{ project_name }}.zip'"
+      register: check_src_package
+    - debug: msg={{check_src_package.stdout_lines}}
+
+
 - hosts: 192.168.6.123
   remote_user: root
   vars:

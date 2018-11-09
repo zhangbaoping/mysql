@@ -9,8 +9,8 @@
     project_name: yinuojr-ops
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
-    dst_package_host_ip: 192.168.6.123
-    date_time: date +"%Y%m%d%H%M%S"
+    dst_package_host_ip: 192.168.5.100
+    random_number: "{{ 10000 | random }}"
     
   tasks:
     - name: create directory
@@ -60,8 +60,8 @@
     - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
 
     - name: unarchive yinuojr_ops package
-      #unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      shell: cd {{ project_data_path }} && unzip {{ project_name }}.zip
+      unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
+      #shell: cd {{ project_data_path }} && unzip {{ project_name }}.zip
 
     - name: start yinuojr_ops service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

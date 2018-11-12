@@ -68,6 +68,10 @@
     #  register: check_out_discovery
     #- debug: msg="{{check_out_discovery.stdout_lines}}"
 
+    - name: 生成时间变量
+      command: date +"%Y%m%d%H%M"
+      register: date_output
+
     - shell: 'if [ ! -d /bubidata/server/data/yinuojr-discovery/ ] ; then echo "not exists" ; else echo "exists" ;fi' 
       ignore_errors: true
       register: result    
@@ -99,11 +103,7 @@
       when: ( res == "exists")
 
     - name: 更新服务，备份现有服务程序
-      shell: tar czvf {{ project_backup_path }}/{{ project_name}}.tar.gz {{ project_data_path }}/{{ project_name }}
-      when: ( res == "exists")
-
-    - name: 更新服务，删除现有服务程序
-      shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
+      shell: mv {{ project_data_path }}/{{ project_name}}  {{ project_data_path }}/{{ project_name }}.{{ date_output }}
       when: ( res == "exists")
 
     - name: 更新服务，解压文件

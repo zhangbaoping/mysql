@@ -90,10 +90,6 @@
       wait_for: port={{ project_run_port }} delay=5 state=started
       when: ( res == "not exists")
 
-    - name: 暂停一分钟，执行SQL文本
-      pause: seconds=60
-      when: ( res == "not exists")
-
     - name: 新增服务，服务启动完成
       shell: echo "Start Successful !!!"
       when: ( res == "not exists")
@@ -112,6 +108,10 @@
 
     - name: 更新服务，解压文件
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
+      when: ( res == "exists")
+
+    - name: 暂停一分钟，执行SQL文本
+      pause: seconds=60
       when: ( res == "exists")
 
     - name: 更新服务，启动服务程序

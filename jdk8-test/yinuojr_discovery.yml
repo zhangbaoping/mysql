@@ -106,8 +106,8 @@
       shell: cd {{ project_data_path }} && rm -rf {{ project_name }} && rm -rf {{ project_name }}.zip
       when: ( res == "exists")
 
-    - wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
-    - wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
+    #- wait_for: path={{ project_data_path }}/{{ project_name }} state=absent
+    #- wait_for: path={{ project_data_path }}/{{ project_name }}.zip state=absent
 
     - name: copy yinuojr_discovery package to dst host and unzip 
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}

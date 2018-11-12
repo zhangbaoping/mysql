@@ -17,6 +17,11 @@
         - "{{ src_host_ip }}"
         - "{{ project_name }}"
 
+    #- name: check yinuojr_discovery project status
+    #  shell: "ps -ef|grep discovery|grep -v grep |awk '{print $2}'"
+    #  register: check_out_discovery
+    #- debug: msg="{{check_out_discovery.stdout_lines}}"
+
     - name: create directory
       shell: mkdir -p {{ localhost_host_path }}
 

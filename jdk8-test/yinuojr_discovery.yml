@@ -63,11 +63,6 @@
     - wait_for: path={{ project_name }} state=present
     - wait_for: path={{ project_data_path }} state=present
 
-    #- name: check yinuojr_discovery project status
-    #  shell: "ps -ef|grep discovery|grep -v grep |awk '{print $2}'"
-    #  register: check_out_discovery
-    #- debug: msg="{{check_out_discovery.stdout_lines}}"
-
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output

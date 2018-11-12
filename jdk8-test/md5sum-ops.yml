@@ -22,6 +22,9 @@
     #  register: check_out_discovery
     #- debug: msg="{{check_out_discovery.stdout_lines}}"
 
+    #- name: 服务停止后暂停十秒
+    #  pause: seconds=10
+
     - name: create directory
       shell: mkdir -p {{ localhost_host_path }}
 

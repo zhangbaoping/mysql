@@ -10,7 +10,6 @@
     service_run_port: 21019
     src_package_host_ip: 192.168.2.40
     dst_package_host_ip: 192.168.6.123
-    random_number: "{{ 10000 | random }}"
     
   tasks:
     - name: create directory

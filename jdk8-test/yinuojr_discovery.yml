@@ -78,7 +78,7 @@
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "not exists")
 
-    - name: 暂停一分钟，执行SQL文本
+    - name: 新增服务，暂停一分钟执行SQL文本
       pause: seconds=60
       when: ( res == "not exists")
 
@@ -98,7 +98,7 @@
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
       when: ( res == "exists")
 
-    - name: 更新服务，检查端口是否存在 
+    - name: 更新服务，检查端口是否存在
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
       when: ( res == "exists")
 
@@ -110,7 +110,7 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "exists")
 
-    - name: 暂停一分钟，执行SQL文本
+    - name: 更新服务，暂停一分钟执行SQL文本
       pause: seconds=60
       when: ( res == "exists")
 

@@ -36,13 +36,13 @@
 - hosts: 192.168.6.123
   remote_user: root
   vars:
-    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-discovery/target
+    src_host_path: /data/backup/yinuojr-discovery/target
     dst_host_path: /data/backup/yinuojr-discovery/target
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-discovery
     project_run_port: 11009
-    src_host_ip: 192.168.2.40
+    src_host_ip: 192.168.5.100
     dst_host_ip: 192.168.6.123
     random_number: "{{ 10000 | random }}"
     
@@ -75,7 +75,7 @@
     - set_fact: res="{{result.stdout}}"
 
     - name: xxx
-      unarchive: src={{ dst_host_dir }}/{{ project_name }}.zip dest={{ project_data_dir }}
+      unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "not exists")
 
     - name: xxx

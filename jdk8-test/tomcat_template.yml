@@ -1,0 +1,67 @@
+---
+- hosts: 192.168.6.123
+  remote_user: root
+  vars:
+    src_host_dir: /home/jekins/.jenkins/workspace/test-yinuojr-ops/target
+    dst_host_dir: /data/backup/yinuojr-ops/target
+    service_data_dir: /bubidata/server/data
+    service_backup_dir: /data/backup
+    service_name: yinuojr-ops
+    service_run_port: 21019
+    src_package_host_ip: 192.168.2.40
+    dst_package_host_ip: 192.168.6.123
+    random_number: "{{ 10000 | random }}"
+    
+  tasks:
+    - name: create directory
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ src_host_dir }}"
+        - "{{ dst_host_dir }}"
+        - "{{ service_backup_dir }}"
+        - "{{ service_name }}"
+        - "{{ service_data_dir }}"
+
+    - wait_for: path={{ src_host_dir }} state=present
+    - wait_for: path={{ dst_host_dir }} state=present
+    - wait_for: path={{ service_backup_dir }} state=present
+    - wait_for: path={{ service_name }} state=present
+    - wait_for: path={{ service_data_dir }} state=present
+
+    - name: 检查进程是否存在，并打印输出进程号
+      shell: "ps -ef|grep ops|grep -v grep |awk '{print $2}'"
+      register: check_out_ops
+    - debug: msg="{{check_out_ops.stdout_lines}}"
+
+    - name: 关闭yinuojr_ops服务
+      shell: source /etc/profile && cd {{ service_data_dir }}/{{ service_name }}/bin && ./launch stop
+
+    - name: 服务停止后暂停十秒
+      pause: seconds=10
+
+    - name: 验证服务是否关闭
+      wait_for: port={{ service_run_port }} delay=3 state=stopped timeout=10
+
+    - name: 获取时间
+      command: date +"%Y%m%d%H%M"
+      register: date_output
+
+    - name: 备份yinuojr_ops程序，后面跟时间戳显示
+      shell: mv {{ service_data_dir }}/{{ service_name }} {{ service_backup_dir }}/{{ service_name}}.{{date_output.stdout}}
+
+    - name: 删除旧的yinuojr-ops程序
+      shell: rm -rf {{ service_backup_dir }}/{{ service_name}} 
+
+    - name: 解压新yinuojr_ops程序到本地，并保留拷贝过来的压缩包文件
+      unarchive: src={{ dst_host_dir }}/{{ service_name }}.zip dest={{ service_data_dir }} copy=yes
+
+    - name: 启动yinuojr_ops服务程序
+      shell: source /etc/profile && cd {{ service_data_dir }}/{{ service_name }}/bin && ./launch start
+
+    - name: 检查服务是否启动
+      wait_for: port={{ service_run_port }} delay=5 state=started timeout=30
+
+    - name: 服务启动成功
+      command: echo "Start Successful !!!"
+      register: echo_output
+    - debug: msg="{{echo_output.stdout_lines}}"

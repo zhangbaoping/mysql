@@ -1,0 +1,16 @@
+---
+- hosts: 192.168.6.123
+  remote_user: root
+  vars:
+  tasks:
+  - name: touch file
+    command: touch /tmp/aaaa.txt
+
+  - name: 获取时间
+    command: date
+    register: date_output
+
+  - name: xxx
+    shell: mv /tmp/aaaa.txt /tmp/aaaa.{{ date_output}}.txt
+
+    

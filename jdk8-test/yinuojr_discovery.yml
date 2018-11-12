@@ -80,6 +80,7 @@
 
     - name: 暂停一分钟，执行SQL文本
       pause: seconds=60
+      when: ( res == "not exists")
 
     - name: 新增服务，启动服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

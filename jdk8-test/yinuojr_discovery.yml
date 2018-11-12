@@ -68,6 +68,15 @@
       register: check_out_discovery
     - debug: msg="{{check_out_discovery.stdout_lines}}"
 
+    - shell: 'if [ ! -d /bubidata/server/data/yinuojr-ops/ ] ; then echo "added" ; else echo "update" ;fi' 
+      ignore_errors: true
+      register: result    
+    - debug: msg="{{result.stdout}}"
+    - set_fact: res="{{result.stdout}}"
+
+    - name：
+      when: ( res == "added")
+
     - name: stop yinuojr_discovery service
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
 

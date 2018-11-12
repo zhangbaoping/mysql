@@ -104,7 +104,7 @@
       when: ( res == "exists")
 
     - name: 更新服务，备份现有服务程序
-      shell: mv {{ project_data_path }}/{{ project_name}}  {{ project_data_path }}/{{ project_name }}.{{date_output.stdout}}
+      shell: mv {{ project_data_path }}/{{ project_name}}  {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
       when: ( res == "exists")
 
     - name: 更新服务，解压文件

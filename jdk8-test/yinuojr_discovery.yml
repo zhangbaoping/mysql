@@ -72,7 +72,8 @@
       command: date +"%Y%m%d%H%M"
       register: date_output
 
-    - shell: 'if [ ! -d /bubidata/server/data/yinuojr-discovery/ ] ; then echo "not exists" ; else echo "exists" ;fi' 
+    - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
+      shell: 'if [ ! -d /bubidata/server/data/yinuojr-discovery/ ] ; then echo "not exists" ; else echo "exists" ;fi' 
       ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"

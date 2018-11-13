@@ -1,5 +1,6 @@
 ---
-- import_playbook: yinuojr_ops.yml
-  tags: yinuojr_ops
-- import_playbook: yinuojr_discovery.yml
-  tags: yinuojr_discovery
+- hosts: "{{ host_ip }}"
+  tasks:
+      - name: 变量名称
+        debug: msg="name---> {{ service_name }} {{ service_port }} {{ src_server_name }} {{ host_ip }}"
+

@@ -27,11 +27,11 @@
       shell: "ssh root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip >/tmp/md5sum_jenkins_tmp.txt"
     
     - name: 生成本地包MD5码比对文件
-      shell: cat /tmp/md5sum_local_tmp.txt |awk '{print $1}' >/tmp/md5sum_local_ops.txt
+      shell: cat /tmp/md5sum_local_tmp.txt |awk '{print $1}' >/tmp/md5sum_local_discovery.txt
       register: md5sum_dest
     
     - name: 生成Jenkins源头包MD5码比对文件
-      shell: cat /tmp/md5sum_jenkins_tmp.txt |awk '{print $1}' >/tmp/md5sum_jenkins_ops.txt
+      shell: cat /tmp/md5sum_jenkins_tmp.txt |awk '{print $1}' >/tmp/md5sum_jenkins_discovery.txt
       register: md5sum_src
 
     - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error

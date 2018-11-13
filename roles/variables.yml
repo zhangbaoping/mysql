@@ -1,0 +1,1 @@
+- include: yinuojr_ops.yml service_name=ops service_port=21019 src_server_name=test-yinuojr-ops host_ip=192.168.6.123

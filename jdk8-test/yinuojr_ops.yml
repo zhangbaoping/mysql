@@ -47,7 +47,7 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: yinuojr-ops
-    project_run_port: 21009
+    project_run_port: 21019
     src_host_ip: 192.168.5.100
     dst_host_ip: 192.168.6.123
     random_number: "{{ 10000 | random }}"

@@ -1,0 +1,38 @@
+---
+- hosts: 192.168.5.100
+  remote_user: root
+  vars:
+    src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
+    localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
+    project_name: "yinuojr-{{ service_name }}"
+    src_host_ip: 192.168.2.40
+
+  tasks:
+    - name: 创建目录
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ localhost_host_path }}"
+        - "{{ project_name }}"
+
+    - name: 远程拷贝更新包到本地机器
+      command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
+
+    - name: 生成本地包MD5码
+      shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
+      register: md5sum_local
+    - debug: msg={{md5sum_local.stdout}}
+    
+    - name: 生成Jenkins源头包MD5码时间
+      shell: "ssh root@{{ src_host_ip }} stat {{ src_host_path }}/{{ project_name }}.zip|grep  Change|awk '{print $2,$3}'"
+      register: md5_src_time
+    - debug: msg={{md5_src_time.stdout}}
+
+    - name: 生成Jenkins源头包MD5码
+      shell: "ssh root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
+      register: md5sum_src
+    - debug: msg={{md5sum_src.stdout}}
+    
+    - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
+      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "md5sum right";else echo "md5sum error";fi'
+      register: result    
+    - debug: msg="{{result.stdout}}"

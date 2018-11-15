@@ -48,7 +48,7 @@
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
     project_name: "yinuojr-{{ service_name }}"
-    project_run_port: "{{ 21019 }}"
+    project_run_port: "{{ service_port }}"
     src_host_ip: 192.168.5.100
     random_number: "{{ 10000 | random }}"
     
@@ -102,7 +102,7 @@
       when: ( res == "exists")
 
     - name: 如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
-      shell: 'if [ service_name == "api" ];then mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/;else echo "not api service" ;fi'
+      shell: 'if [ service_name == api ];then mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/;else echo "not api service";fi'
       when: ( res == "exists" )
 
     - name: 更新服务，启动服务程序

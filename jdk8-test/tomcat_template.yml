@@ -3,10 +3,9 @@
   remote_user: root
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
-    #src_api_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/scf-main/target/"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_name: "yinuojr-{{ service_name }}"
-    src_host_ip: 192.168.2.40
+    src_host_ip: "192.168.2.40"
 
   tasks:
     - name: 创建目录
@@ -42,15 +41,13 @@
 - hosts: "{{ host_ip }}"
   remote_user: root
   vars:
-
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    project_data_path: /bubidata/server/data
-    project_backup_path: /data/backup
+    project_data_path: "/bubidata/server/data"
+    project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
-    project_run_port: "{{ 21019 }}"
-    src_host_ip: 192.168.5.100
-    random_number: "{{ 10000 | random }}"
+    project_run_port: "{{ service_port }}"
+    src_host_ip: "192.168.5.100"
     
   tasks:
     - name: 创建目录
@@ -65,10 +62,11 @@
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output
+    - debug: msg={{ date_output.stdout }}
 
     - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
       shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ; then echo "not exists" ; else echo "exists" ;fi' 
-      ignore_errors: true
+      #ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
@@ -77,28 +75,19 @@
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "not exists")
 
-    - name: 新增服务，暂停一分钟执行SQL文本
-      pause: seconds=60
-      when: ( res == "not exists")
+    #- name: 新增服务，暂停一分钟执行SQL文本
+    #  pause: seconds=60
+    #  when: ( res == "not exists")
 
     - name: 新增服务，启动服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "not exists")
 
-    - name: 新增服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 state=started timeout=120
-      when: ( res == "not exists")
-
-    - name: 新增服务，服务启动完成
-      shell: echo "Start Successful !!!"
-      register: echo
-    - debug: msg="{{echo.stdout}}"
-
     - name: 更新服务，服务停止
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
       when: ( res == "exists")
 
-    - name: 更新服务，检查端口是否存在
+    - name: 检查端口是否关闭
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
       when: ( res == "exists")
 
@@ -110,20 +99,17 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "exists")
 
-    - name: 更新服务，如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
-      shell: mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/
-      when: ( service_name == "api")
+    - name: 如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
+      shell: 'if [ service_name == api ];then mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/;else echo "not api service";fi'
+      when: ( res == "exists" )
 
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "exists")
 
-    - name: 更新服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 state=started timeout=120
-
-    - name: 更新服务，服务启动完成
-      shell: echo "Start Successful !!!"
-      register: echo
-    - debug: msg="{{echo.stdout}}"
+    - name: 更新服务，检查端口是否存在并打印端口号
+      shell: 'netstat -ntlup|grep {{ project_run_port }}|cut -d ":" -f 4'
+      register: service_port
+    - debug: msg="{{service_port.stdout.line}}"
 
       

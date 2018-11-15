@@ -109,7 +109,7 @@
       when: ( res == "exists")
 
     - name: 如果为API服务更新，则需要拷贝原有服务conf目录的pdf到更新后的目录
-      shell: 'if [ "$server_name" = "api" ] ; then "copy -a {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/" ; else echo "{{ $server_name }} 服务更新" ;fi'
+      shell: 'if [ "$server_name" = "api" ] ; then "copy -a {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/" ; else echo "无需拷贝pdf文件" ;fi'
 
     - name: 更新服务，暂停一分钟执行SQL文本
       pause: seconds=60

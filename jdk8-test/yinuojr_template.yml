@@ -101,10 +101,9 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "exists")
 
-    - name: 更新服务，如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
+    - name: 如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
       shell: mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/
       when: ( service_name == "api")
-      when: ( res == "exists")
 
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

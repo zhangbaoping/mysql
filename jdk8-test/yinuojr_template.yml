@@ -110,6 +110,6 @@
     - name: 更新服务，检查端口是否存在并打印端口号
       shell: 'netstat -ntlup|grep {{ project_run_port }}|cut -d ":" -f 4'
       register: service_port
-    - debug: msg={{ service_port.stdout }}
+    - debug: msg="{{ service_port.stdout }}"
 
       

@@ -3,6 +3,7 @@
   remote_user: root
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
+    #src_api_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/scf-main/target/"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_name: "yinuojr-{{ service_name }}"
     src_host_ip: 192.168.2.40
@@ -41,7 +42,7 @@
 - hosts: "{{ host_ip }}"
   remote_user: root
   vars:
-    
+
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_data_path: /bubidata/server/data
@@ -108,10 +109,6 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "exists")
 
-    - name: 如果为API服务更新，则需要拷贝原有服务conf目录的pdf到更新后的目录
-      shell: mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/
-      when: ( "server_name" == "api") 
-    
     - name: 更新服务，暂停一分钟执行SQL文本
       pause: seconds=60
       when: ( res == "exists")
@@ -121,11 +118,10 @@
       when: ( res == "exists")
 
     - name: 更新服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 timeout=120
+      wait_for: port={{ project_run_port }} delay=5 state=started
+      when: ( res == "exists")
 
     - name: 更新服务，服务启动完成
       shell: echo "Start Successful !!!"
-      register: echo
-    - debug: msg="{{echo.stdout}}"
-
+      when: ( res == "exists")
       

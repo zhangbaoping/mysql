@@ -113,19 +113,16 @@
       shell: mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf/* {{ project_data_path }}/{{ project_name}}/conf/pdf/
       when: ( service_name == "api")
 
-    - name: 更新服务，暂停一分钟执行SQL文本
-      pause: seconds=60
-      when: ( res == "exists")
-
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "exists")
 
     - name: 更新服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 state=started
-      when: ( res == "exists")
+      wait_for: port={{ project_run_port }} delay=5 timeout=120
 
     - name: 更新服务，服务启动完成
       shell: echo "Start Successful !!!"
-      when: ( res == "exists")
+      register: echo
+    - debug: msg="{{echo.stdout}}"
+
       

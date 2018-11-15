@@ -77,9 +77,9 @@
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "not exists")
 
-    - name: 新增服务，暂停一分钟执行SQL文本
-      pause: seconds=60
-      when: ( res == "not exists")
+    #- name: 新增服务，暂停一分钟执行SQL文本
+    #  pause: seconds=60
+    #  when: ( res == "not exists")
 
     - name: 新增服务，启动服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

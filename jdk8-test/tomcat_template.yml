@@ -62,12 +62,6 @@
         - "{{ project_name }}"
         - "{{ project_data_path }}"
 
-    - wait_for: path={{ src_host_path }} state=present
-    - wait_for: path={{ dst_host_path }} state=present
-    - wait_for: path={{ project_backup_path }} state=present
-    - wait_for: path={{ project_name }} state=present
-    - wait_for: path={{ project_data_path }} state=present
-
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output

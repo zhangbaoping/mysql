@@ -23,9 +23,9 @@
     - debug: msg={{md5sum_local.stdout}}
     
     - name: 生成Jenkins源头包MD5码时间
-      shell: "ssh root@{{ src_host_ip }} stat {{ src_host_path }}/{{ project_name }}.zip|grep Change|awk '{print $2,$3}'"
+      shell: ssh root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
       register: md5_src_time
-    - debug: msg={{md5_src_time.stdout}}
+    - debug: msg="{{md5_src_time}}" 
 
     - name: 生成Jenkins源头包MD5码
       shell: "ssh root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
@@ -38,19 +38,20 @@
     - debug: msg="{{result.stdout}}"
 
 
-- hosts: "{{ host_ip }}"
+- hosts: 192.168.6.123,192.168.6.122
   remote_user: root
   vars:
-    
-    src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
+    src_host_path: /data/backup/yinuojr-discovery/target
+    dst_host_path: /data/backup/yinuojr-discovery/target
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
-    project_name: "yinuojr-{{ service_name }}"
-    project_run_port: "{{ 21019 }}"
+    project_name: yinuojr-discovery
+    project_run_port: 11009
     src_host_ip: 192.168.5.100
+    dst_host_ip: 192.168.6.123
     random_number: "{{ 10000 | random }}"
-     
+    
+    
   tasks:
     - name: 创建变量对应的目录
       file: path={{ item }} state=directory
@@ -61,18 +62,12 @@
         - "{{ project_name }}"
         - "{{ project_data_path }}"
 
-    - wait_for: path={{ src_host_path }} state=present
-    - wait_for: path={{ dst_host_path }} state=present
-    - wait_for: path={{ project_backup_path }} state=present
-    - wait_for: path={{ project_name }} state=present
-    - wait_for: path={{ project_data_path }} state=present
-
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output
 
     - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
-      shell: 'if [ ! -d /bubidata/server/data/yinuojr-ops/ ] ; then echo "not exists" ; else echo "exists" ;fi' 
+      shell: 'if [ ! -d /bubidata/server/data/yinuojr-discovery/ ] ; then echo "not exists" ; else echo "exists" ;fi' 
       ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"
@@ -129,3 +124,4 @@
     - name: 更新服务，服务启动完成
       shell: echo "Start Successful !!!"
       when: ( res == "exists")
+      

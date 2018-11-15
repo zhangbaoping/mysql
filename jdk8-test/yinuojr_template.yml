@@ -3,10 +3,9 @@
   remote_user: root
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
-    #src_api_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/scf-main/target/"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_name: "yinuojr-{{ service_name }}"
-    src_host_ip: 192.168.2.40
+    src_host_ip: "192.168.2.40"
 
   tasks:
     - name: 创建目录
@@ -42,15 +41,13 @@
 - hosts: "{{ host_ip }}"
   remote_user: root
   vars:
-
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    project_data_path: /bubidata/server/data
-    project_backup_path: /data/backup
+    project_data_path: "/bubidata/server/data"
+    project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
-    src_host_ip: 192.168.5.100
-    random_number: "{{ 10000 | random }}"
+    src_host_ip: "192.168.5.100"
     
   tasks:
     - name: 创建目录
@@ -68,7 +65,7 @@
 
     - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
       shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ; then echo "not exists" ; else echo "exists" ;fi' 
-      ignore_errors: true
+      #ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"

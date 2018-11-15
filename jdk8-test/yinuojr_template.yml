@@ -62,6 +62,7 @@
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output
+    - debug: msg={{ date_output.stdout }}
 
     - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
       shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ; then echo "not exists" ; else echo "exists" ;fi' 
@@ -107,7 +108,7 @@
       when: ( res == "exists")
 
     - name: 更新服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 state=started 
+      wait_for: port={{ project_run_port }} state=started 
 
     - name: 服务启动完成
       shell: echo "Start Successful !!!"

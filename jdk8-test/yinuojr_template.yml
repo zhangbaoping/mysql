@@ -47,7 +47,7 @@
     project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
-    src_host_ip: "192.168.5.100"
+    dst_host_ip: "192.168.6.123"
     
   tasks:
     - name: 创建目录
@@ -108,8 +108,8 @@
       when: ( res == "exists")
 
     - name: 更新服务，检查端口是否存在并打印端口号
-      shell: 'netstat -ntlup|grep {{ project_run_port }}|cut -d ":" -f 4'
+      shell: ssh -o StrictHostKeyChecking=no root@{{ dst_host_ip }} 'netstat -ntlup|grep {{ project_run_port }}|cut -d ":" -f 4'
       register: service_port
-    - debug: msg="{{service_port.stdout}}"
+    - debug: msg="{{service_port.stdout.line}}"
 
       

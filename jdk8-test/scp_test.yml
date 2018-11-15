@@ -23,9 +23,9 @@
     - debug: msg={{md5sum_local.stdout}}
     
     - name: 生成Jenkins源头包MD5码时间
-      shell: "ssh root@{{ src_host_ip }} stat {{ src_host_path }}/{{ project_name }}.zip|grep  Change|awk '{print $2,$3}'|echo"
+      shell: ssh root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
       register: md5_src_time
-    - debug: msg={{md5_src_time.stdout}}
+    - debug: msg="{{md5_src_time}}" 
 
     - name: 生成Jenkins源头包MD5码
       shell: "ssh root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"

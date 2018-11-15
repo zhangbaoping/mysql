@@ -38,22 +38,21 @@
     - debug: msg="{{result.stdout}}"
 
 
-- hosts: 192.168.6.123,192.168.6.122
+- hosts: "{{ host_ip }}"
   remote_user: root
   vars:
-    src_host_path: /data/backup/yinuojr-discovery/target
-    dst_host_path: /data/backup/yinuojr-discovery/target
+  
+    src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
+    dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_data_path: /bubidata/server/data
     project_backup_path: /data/backup
-    project_name: yinuojr-discovery
-    project_run_port: 11009
+    project_name: "yinuojr-{{ service_name }}"
+    project_run_port: "{{ 21019 }}"
     src_host_ip: 192.168.5.100
-    dst_host_ip: 192.168.6.123
     random_number: "{{ 10000 | random }}"
     
-    
   tasks:
-    - name: 创建变量对应的目录
+    - name: 创建目录
       file: path={{ item }} state=directory
       with_items:
         - "{{ src_host_path }}"

@@ -121,9 +121,10 @@
 
     - name: 更新服务，检查端口是否存在
       wait_for: port={{ project_run_port }} delay=5 state=started
-      when: ( res == "exists")
 
     - name: 更新服务，服务启动完成
       shell: echo "Start Successful !!!"
-      when: ( res == "exists")
+      register: echo
+    - debug: msg="{{echo.stdout}}"
+
       

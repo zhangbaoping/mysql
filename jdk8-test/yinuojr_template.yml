@@ -107,12 +107,9 @@
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "exists")
 
-    - name: 更新服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} state=started 
-
-    - name: 服务启动完成
-      shell: echo "Start Successful !!!"
-      register: echo_update
-    - debug: msg="{{echo_update.stdout}}"
+    - name: 更新服务，检查端口是否存在并打印端口号
+      shell: netstat -ntlup|grep {{ project_run_port }}|awk -F':' '{print $4}'
+      register: service_port
+    - debug: msg={{ service_port.stdout }}
 
       

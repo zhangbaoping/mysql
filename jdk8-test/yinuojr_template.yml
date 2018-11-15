@@ -86,14 +86,14 @@
       when: ( res == "not exists")
 
     - name: 新增服务，检查端口是否存在
-      wait_for: port={{ project_run_port }} delay=5 state=started
+      wait_for: port={{ project_run_port }} delay=5 timeout=120
       when: ( res == "not exists")
 
     - name: 新增服务，服务启动完成
-      shell: echo "Start Successful !!!"
-      register: echo
-    - debug: msg="{{echo.stdout}}"
-    
+      shell: echo_add "Start Successful !!!"
+      register: echo_add
+    - debug: msg="{{echo_add.stdout}}"
+
     - name: 更新服务，服务停止
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
       when: ( res == "exists")
@@ -123,7 +123,7 @@
 
     - name: 更新服务，服务启动完成
       shell: echo "Start Successful !!!"
-      register: echo
-    - debug: msg="{{echo.stdout}}"
+      register: echo_update
+    - debug: msg="{{echo_update.stdout}}"
 
       

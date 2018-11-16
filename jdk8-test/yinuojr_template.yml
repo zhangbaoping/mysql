@@ -9,10 +9,10 @@
 
   tasks:
     - file: 创建目录 
-      path: {{ localhost_host_path }} 
+      path: "{{ localhost_host_path }}" 
       state: directory
     - file: 创建目录
-      path: {{ project_name }} 
+      path: "{{ project_name }}" 
       state: directory
 
     - name: 远程拷贝更新包到本地机器
@@ -52,19 +52,19 @@
     
   tasks:
     - file: 创建目录
-      path: {{ src_host_path }}
+      path: "{{ src_host_path }}"
       state: directory
     - file: 创建目录
-      path: {{ dst_host_path }}
+      path: "{{ dst_host_path }}"
       state: directory
     - file: 创建目录
-      path: {{ project_backup_path }}
+      path: "{{ project_backup_path }}"
       state: directory
     - file: 创建目录
-      path: {{ project_name }}
+      path: "{{ project_name }}"
       state: directory
     - file: 创建目录
-      path: {{ project_data_path }}
+      path: "{{ project_data_path }}"
       state: directory
 
     - name: 生成时间变量

@@ -13,4 +13,10 @@
   - name: xxx
     shell: mv /tmp/aaaa.txt /tmp/aaaa.{{ date_output}}.txt
 
+
+- include: yinuojr_template.yml service_name=discovery service_port=11009 src_server_name=test-yinuojr-discovery host_ip=192.168.6.123
+  tags: yinuojr_discovery
+- include: yinuojr_template.yml service_name=api service_port=31019 src_server_name="test-bunuo-scf/scf-main" host_ip=192.168.6.123
+  tags: yinuojr_api
+
     

@@ -8,11 +8,15 @@
     src_host_ip: "192.168.2.40"
 
   tasks:
-    - name: 创建目录
-      file: path={{ item }} state=directory
-      with_items:
-        - "{{ localhost_host_path }}"
-        - "{{ project_name }}"
+    - file: 创建目录 
+      path: {{ localhost_host_path }} 
+      state: directory
+    - file: 创建目录
+      path: {{ project_name }} 
+      state: directory
+      #with_items:
+      #  - "{{ localhost_host_path }}"
+      #  - "{{ project_name }}"
 
     - name: 远程拷贝更新包到本地机器
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
@@ -50,14 +54,21 @@
     dst_host_ip: "192.168.6.123"
     
   tasks:
-    - name: 创建目录
-      file: path={{ item }} state=directory
-      with_items:
-        - "{{ src_host_path }}"
-        - "{{ dst_host_path }}"
-        - "{{ project_backup_path }}"
-        - "{{ project_name }}"
-        - "{{ project_data_path }}"
+    - file: 创建目录
+      path: {{ src_host_path }}
+      state: directory
+    - file: 创建目录
+      path: {{ dst_host_path }}
+      state: directory
+    - file: 创建目录
+      path: {{ project_backup_path }}
+      state: directory
+    - file: 创建目录
+      path: {{ project_name }}
+      state: directory
+    - file: 创建目录
+      path: {{ project_data_path }}
+      state: directory
 
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"

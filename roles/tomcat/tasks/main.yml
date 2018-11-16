@@ -1,0 +1,5 @@
+---
+- hosts: "{{ host_ip }}"
+  tasks:
+    - name: 变量名称
+      debug: msg="name---> {{ service_name }} {{ service_port }} {{ src_server_name }} {{ host_ip }}"

@@ -104,7 +104,7 @@
       when: ( res == "exists")
 
     - name: 更新完成
-      command: echo "更新完成"
+      shell: echo "更新完成"
       register: echo
     - debug: msg={{ echo_stdout }}
 

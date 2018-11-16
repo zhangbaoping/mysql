@@ -14,7 +14,7 @@
     - file:
         path: "{{ project_name }}" 
         state: directory
-        
+
     - debug: msg="{{ src_host_path }}/{{ project_name }}.zip "
     - name: 远程拷贝更新包到本地机器
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
@@ -114,7 +114,7 @@
       when: ( res == "exists")
 
     - name: 更新服务完成，并打印输出端口
-      shell: netstat -ntlup|grep 11009|awk -F':'  '{print $4}'
+      shell: netstat -ntlup|grep {{ project_run_port }}|awk -F':'  '{print $4}'
       register: port_output
     - debug: msg={{ port_output.stdout }}
 

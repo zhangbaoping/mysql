@@ -40,7 +40,6 @@
       register: result    
     - debug: msg="{{result.stdout}}"
 
-
 - hosts: "{{ host_ip }}"
   remote_user: root
   vars:

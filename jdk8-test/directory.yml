@@ -2,8 +2,8 @@
 - hosts: 192.168.5.100
   remote_user: root
   vars:
-    item: /tmp/xxxxxxxxxxxx
+   xxxx: /tmp/ab
   tasks:
-    - file: mkdir
-        path: "{{ item }}"
-        state: directory
+    - file: 
+       path: "{{ xxxx }}"
+       state: directory

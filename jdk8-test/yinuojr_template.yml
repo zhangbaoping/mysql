@@ -15,11 +15,9 @@
         path: "{{ project_name }}" 
         state: directory
 
-    - debug: msg="{{ src_host_path }}/{{ project_name }}.zip "
     - name: 远程拷贝更新包到本地机器
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
     
-
     - name: 生成本地包MD5码
       shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
       register: md5sum_local

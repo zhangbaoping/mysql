@@ -9,4 +9,4 @@
 - include: yinuojr_template.yml service_name=user service_port=11019 src_server_name="test-yinuojr-user" host_ip=140.143.145.253
   tags: yinuojr_user
 - include: yinuojr_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="58.87.79.105,140.143.138.123"
-  tags: yinuojr_user
+  tags: yinuojr_notice

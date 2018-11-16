@@ -1,0 +1,9 @@
+---
+- hosts: 192.168.5.100
+  remote_user: root
+  vars:
+    item: /tmp/xxxxxxxxxxxx
+  tasks:
+    - file: mkdir
+      patch: "{{ item }}"
+      state: directory

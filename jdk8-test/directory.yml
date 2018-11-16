@@ -5,5 +5,5 @@
     item: /tmp/xxxxxxxxxxxx
   tasks:
     - file: mkdir
-      patch: "{{ item }}"
+      path: "{{ item }}"
       state: directory

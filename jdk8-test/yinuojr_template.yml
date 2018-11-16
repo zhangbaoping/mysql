@@ -111,7 +111,7 @@
       when: ( res == "exists")
 
     - name: 更新服务完成，并打印输出端口
-      shell: netstat -ntlup|grep {{ project_run_port }}|awk -F':'  '{print $4}'
+      shell: "netstat -ntlup|grep {{ project_run_port }}|awk -F':'  '{print $4}'"
       register: port_output
     - debug: msg={{ port_output.stdout }}
 

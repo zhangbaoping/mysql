@@ -103,7 +103,7 @@
       when: ( res == "exists")
 
     - name: 如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
-      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && mv {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf {{ project_data_path }}/{{ project_name}}/conf/
+      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf {{ project_data_path }}/{{ project_name}}/conf/
       when: ( service_name == "api" )
 
     - name: 更新服务，启动服务程序

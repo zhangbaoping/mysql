@@ -74,7 +74,8 @@
       shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ;then echo "directory not exists" ;else echo "directory exists" ;fi' 
       register: result    
     - debug: msg="{{result.stdout}}"
-
+    - set_fact: res="{{result.stdout}}"
+    
     - name: 新增服务，解压文件
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "directory not exists" )

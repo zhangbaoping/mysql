@@ -78,9 +78,15 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
+    - name: 新增服务，如果是API服务，需要从生产或者预热对应服务pdf目录拷贝文件到当前服务pdf目录下
+      shell: echo "需要从生产或者预热api服务pdf目录拷贝文件到当前pdf目录,很重要，很重要，很重要！！！"
+      when: (res == "directory not exists")
+      register: echo_api
+    - debug: msg={{ echo_api.stdout }} 
+
     - name: 新增服务，解压文件
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      when: ( res == "directory not exists")
+      when: (res == "directory not exists")
 
     - name: 新增服务，启动服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
@@ -102,9 +108,9 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: (res == "directory exists")
 
-    - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到更新后对应pdf目录
+    - name: 更新服务，如果是API服务，拷贝备份文件pdf目录下的所有文件到更新后对应pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
-      when: (service_name == "api")
+      when: (res == "directory exists")
       
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

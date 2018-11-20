@@ -102,7 +102,7 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: ( res == "directory exists")
 
-    - name: 如果是API服务，拷贝bak文件pdf目录下的所有文件到更新后对应pdf目录
+    - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到更新后对应pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
       when: ( service_name == "api" )
       
@@ -111,7 +111,7 @@
       when: ( res == "directory exists")
     
     - name: 服务更新完成
-      shell: echo "服务更新完成"
+      shell: echo "服务更新完成 !!!"
       register: echo_out
     - debug: msg={{ echo_out.stdout }}  
 

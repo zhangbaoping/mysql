@@ -78,11 +78,9 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: 新增服务，如果是API服务，需要从生产或者预热对应服务pdf目录拷贝文件到当前服务pdf目录下
+    - name: 新增服务，如果是API服务，需要从生产或者预热对应服务pdf目录拷贝文件到当前服务pdf目录
       shell: echo "需要从生产或者预热api服务pdf目录拷贝文件到当前pdf目录,很重要，很重要，很重要 !!!"
       when: (res == "directory not exists")
-      register: echo_api
-    - debug: msg={{ echo_api.stdout }} 
 
     - name: 新增服务，解压文件
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}

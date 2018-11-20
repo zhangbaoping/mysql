@@ -1,6 +1,6 @@
 ---
-- hosts: 192.168.5.100
-  remote_user: root
+- hosts: "192.168.5.100"
+  remote_user: "root"
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
@@ -33,13 +33,13 @@
       register: md5sum_src
     - debug: msg={{md5sum_src.stdout}}
     
-    - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
-      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "md5sum right";else echo "md5sum error";fi'
+    - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum ok,不一致输出md5sum error
+      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "md5sum ok";else echo "md5sum error";fi'
       register: result    
     - debug: msg="{{result.stdout}}"
 
 - hosts: "{{ host_ip }}"
-  remote_user: root
+  remote_user: "root"
   vars:
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
@@ -47,7 +47,6 @@
     project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
-    dst_host_ip: "192.168.6.123"
     
   tasks:
     - file: 
@@ -71,8 +70,8 @@
       register: date_output
     - debug: msg={{ date_output.stdout }}
 
-    - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
-      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ;then echo "not exists" ;else echo "exists" ;fi' 
+    - name: 判断目录是否存在，不存在返回directory not exists，存在返回directory exists 
+      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ];then echo "directory not exists";else echo "directory exists";fi' 
       ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"

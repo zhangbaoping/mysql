@@ -109,5 +109,10 @@
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "directory exists")
+    
+    - name: 服务更新完成
+      shell: echo "服务更新完成"
+      register: echo_out
+    - debug: msg={{ echo_out.stdout }}  
 
       

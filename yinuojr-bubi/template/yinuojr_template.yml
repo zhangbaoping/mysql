@@ -114,7 +114,8 @@
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "exists")
-
-     - debug: msg="{{ project_name }}服务更新完成 !!!" 
+    
+    - name: 服务更新完成
+    - debug: msg="{{ project_name }}服务更新完成 !!!" 
 
       

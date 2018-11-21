@@ -10,8 +10,7 @@
     project_run_port: "{{ service_port }}"
     
   tasks:
-  
-    - file: 
+    - file:
         path: "{{ src_host_path }}"
         state: directory
     - file: 

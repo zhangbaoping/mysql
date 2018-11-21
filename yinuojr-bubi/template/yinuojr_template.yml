@@ -115,9 +115,9 @@
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: ( res == "exists")
 
-    - name: 更新服务完成，并打印输出端口
-      shell: "netstat -ntlup|grep {{ project_run_port }}|awk -F':' '{print $4}'"
-      register: port_output
-    - debug: msg={{ port_output.stdout }}
+    - name: 服务更新完成
+      shell: echo "{{ project_name }}服务更新完成 !!!"
+      register: echo_out
+    - debug: msg={{ echo_out.stdout }} 
 
       

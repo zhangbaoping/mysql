@@ -76,8 +76,7 @@
 
     - name: 删除备份目录
       shell: rm -rf {{ project_backup_path }}/{{ project_name }}
-    
-    - name: 服务更新完成
+
     - debug: msg="{{ project_name }}服务更新完成 !!!" 
 
       

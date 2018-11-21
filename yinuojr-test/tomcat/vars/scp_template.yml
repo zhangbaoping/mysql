@@ -16,13 +16,16 @@
 
     - name: 远程拷贝更新包到本地机器
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
-      register: result_out
-    - debug: msg="{{ result_out.stdout }}"
+    
+    - name: 远程拷贝包名称
+      shell: echo "scp {{ project_name }} {{ localhost_host_path }}"
+      register: echo_out
+    - debug: msg="{{echo_out.stdout}}"
     
     - name: 生成本地包MD5码
       shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
       register: md5sum_local
-    - debug: msg={{md5sum_local.stdout}}
+    - debug: msg="{{md5sum_local.stdout}}"
     
     - name: 生成Jenkins源头包MD5码时间
       shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'

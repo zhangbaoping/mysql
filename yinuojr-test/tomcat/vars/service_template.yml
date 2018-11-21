@@ -78,8 +78,6 @@
       shell: rm -rf {{ project_backup_path }}/{{ project_name }}
     
     - name: 服务更新完成
-      shell: echo "{{ project_name }}服务更新完成 !!!"
-      register: echo_out
-    - debug: msg={{ echo_out.stdout }}  
+    - debug: msg="{{ project_name }}服务更新完成 !!!" 
 
       

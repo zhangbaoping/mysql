@@ -113,6 +113,9 @@
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "directory exists")
+
+    - name: 删除备份目录
+      shell: rm -rf {{ project_backup_path }}/{{ project_name }}
     
     - name: 服务更新完成
       shell: echo "服务更新完成 !!!"

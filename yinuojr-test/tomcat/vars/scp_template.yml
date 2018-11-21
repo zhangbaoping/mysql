@@ -18,7 +18,7 @@
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
     
     - name: 远程拷贝包名称
-      shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
+      shell: echo "scp {{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
       register: echo_out
     - debug: msg="{{echo_out.stdout}}"
     

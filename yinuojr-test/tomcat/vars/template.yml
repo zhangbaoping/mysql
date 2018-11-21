@@ -8,9 +8,6 @@
     src_host_ip: "192.168.2.40"
 
   tasks:
-    - name: shell
-      shell: "/usr/bin/sh /package/ssh.sh"
-
     - file:
         path: "{{ localhost_host_path }}" 
         state: directory

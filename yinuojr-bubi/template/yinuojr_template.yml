@@ -39,7 +39,7 @@
     - debug: msg={{md5sum_src.stdout}}
     
     - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
-      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "md5sum right";else echo "md5sum error";fi'
+      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "{{ project_name }} md5sum right";else echo "{{ project_name }} md5sum error";fi'
       register: result    
     - debug: msg="{{result.stdout}}"
 

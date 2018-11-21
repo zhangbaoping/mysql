@@ -1,5 +1,6 @@
 ---
 - hosts: "192.168.5.100"
+  remote_user: "root"
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"

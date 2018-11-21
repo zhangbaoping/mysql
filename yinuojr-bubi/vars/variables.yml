@@ -4,7 +4,7 @@
   tags: yinuojr_auth
 - include: yinuojr_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip=154.8.161.194
   tags: yinuojr_api
-- include: yinuojr_template.yml service_name=user service_port=11019 src_server_name="test-yinuojr-user" host_ip=140.143.145.253
+- include: yinuojr_template.yml service_name=user service_port=18009 src_server_name="test-yinuojr-user" host_ip=140.143.145.253
   tags: yinuojr_user
 - include: yinuojr_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="58.87.79.105,140.143.138.123"
   tags: yinuojr_notice

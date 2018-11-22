@@ -2,6 +2,7 @@
 - hosts: 192.168.6.123
   remote_user: root
   vars:
+   java_directory: "/bubidata/server/java"
 
   tasks:
    - name: check disk
@@ -37,8 +38,14 @@
       - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
       - export PATH=\$JAVA_HOME/bin:\$PATH
 
+   - name: java exist or not 
+     shell: 'if [ ! -d {{ java_directory }} ];then echo "java not exist";else echo "java exist";fi' 
+     register: result_java    
+   - set_fact: res="{{result_java.stdout}}"
+
    - name: unarchive jdk 
      unarchive: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+     when: (res == "java not exist")
 
    - name: source profile
      shell: source /etc/profile

@@ -17,7 +17,7 @@
     - name: 从Jenkins服务器拷贝包到本地
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
     
-    - name: 拷贝的包名称
+    - name: 拷贝的包路径和名称信息
       shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
       register: echo_out
     - debug: msg="{{echo_out.stdout}}"

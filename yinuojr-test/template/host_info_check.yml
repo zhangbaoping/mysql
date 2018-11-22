@@ -28,7 +28,6 @@
    - name: check jdk 
      shell: cat /etc/profile
      register: result_jdk
-   - debug: msg="{{result_jdk.stdout_lines}}"
 
    - name: jdk config
      shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
@@ -51,7 +50,7 @@
      shell: source /etc/profile
 
    - name: jdk print
-     shell: "tail -n 5 /etc/profile"
+     shell: "tail -n 3 /etc/profile"
      register: jdk_print
    - debug: msg="{{jdk_print.stdout_lines}}"
 

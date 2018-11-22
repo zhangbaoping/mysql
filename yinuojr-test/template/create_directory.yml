@@ -16,3 +16,7 @@
         - "{{ localhost_host_path }}"
         - "{{ src_host_ip }}"
         - "{{ project_name }}"
+
+    - name: create directory
+      shell: "mkdir -p /aa /bb /cc /dd"
+    - debug: msg="{{"mkdir -p /aa /bb /cc /dd"}}"

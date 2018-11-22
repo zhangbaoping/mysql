@@ -1,0 +1,18 @@
+---
+- hosts: 192.168.5.100
+  remote_user: root
+  vars:
+    src_host_path: /home/jekins/.jenkins/workspace/test-yinuojr-discovery/target
+    localhost_host_path: /data/backup/yinuojr-discovery/target
+    project_name: yinuojr-discovery
+    src_host_ip: 192.168.2.40
+    dst_host_ip: 192.168.5.100
+
+  tasks:
+    - name: 创建变量对应的目录
+      file: path={{ item }} state=directory
+      with_items:
+        - "{{ src_host_path }}"
+        - "{{ localhost_host_path }}"
+        - "{{ src_host_ip }}"
+        - "{{ project_name }}"

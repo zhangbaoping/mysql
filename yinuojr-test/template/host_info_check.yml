@@ -39,8 +39,9 @@
 
    - name: java exist or not 
      shell: 'if [ ! -d {{ java_directory }} ];then echo "java not exist";else echo "java exist";fi' 
-     register: result_java    
-   - set_fact: res="{{result_java.stdout}}"
+     register: result_java
+   - debug: msg="{{result_java.stdout_lines}}"    
+   - set_fact: res="{{result_java.stdout_lines}}"
 
    - name: unarchive jdk 
      unarchive: src=/package/java_jdk.tar.gz dest=/bubidata/server/

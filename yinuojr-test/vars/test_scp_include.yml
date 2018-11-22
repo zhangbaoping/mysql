@@ -1,12 +1,12 @@
-- include: test_scp_template.yml service_name=oss src_server_name="test-yinuojr-oss"
+- include: ../template/test_scp_template.yml service_name=oss src_server_name="test-yinuojr-oss"
   tags: yinuojr_oss
-- include: test_scp_template.yml service_name=auth src_server_name="test-yinuojr-auth"
+- include: ../template/test_scp_template.yml service_name=auth src_server_name="test-yinuojr-auth"
   tags: yinuojr_auth
-- include: test_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
+- include: ../template/test_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
   tags: yinuojr_api
-- include: test_scp_template.yml service_name=user src_server_name="test-yinuojr-user"
+- include: ../template/test_scp_template.yml service_name=user src_server_name="test-yinuojr-user"
   tags: yinuojr_user
-- include: test_scp_template.yml service_name=notice src_server_name="test-yinuojr-notice"
+- include: ../template/test_scp_template.yml service_name=notice src_server_name="test-yinuojr-notice"
   tags: yinuojr_notice
-- include: test_scp_template.yml service_name=ops src_server_name="test-yinuojr-ops"
+- include: ../template/test_scp_template.yml service_name=ops src_server_name="test-yinuojr-ops"
   tags: yinuojr_ops

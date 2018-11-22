@@ -1,0 +1,26 @@
+---
+- hosts: 192.168.6.123
+  remote_user: root
+  vars:
+
+  tasks:
+   - name: check disk
+     shell: "df -hP|awk 'NR>1 && int($5) > 10'|awk '/success/{ip=$1;next}{print ip,$0}'"
+     register: result_disk
+   - debug: msg="{{result_disk.stdout_lines}}"
+
+   - name: check port
+     shell: "ss -ntl"
+     register: result_port
+   - debug: msg="{{result_port.stdout_lines}}" 
+
+   - name: check memroy
+     shell: "free -m"
+     register: result_memory
+   - debug: msg="{{result_memory.stdout_lines}}"
+  
+   - name: check cpu
+     shell: "iostat -c"
+     register: result_cpu
+   - debug: msg="{{result_cpu.stdout_lines}}"
+

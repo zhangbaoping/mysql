@@ -1,0 +1,6 @@
+---
+- hosts: 192.168.6.123
+  vars:
+   server_name: "tomcat"
+  tasks:
+   - debug: msg="{{ server_name }} start ok"

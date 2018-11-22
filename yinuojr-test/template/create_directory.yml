@@ -20,3 +20,19 @@
     - name: create directory
       shell: "mkdir -p /aa /bb /cc /dd"
     - debug: msg="{{"mkdir -p /aa /bb /cc /dd"}}"
+
+- hosts: 192.168.6.123
+  vars:
+   src_host_path: "as"
+   localhost_host_path: "bs"
+   src_host_ip: "xxxxxs"
+   project_name: "xxxxxys"
+
+  tasks:
+   - name: create directory
+     file: path={{ item }} state=directory
+     with_items:
+        - "{{ src_host_path }}"
+        - "{{ localhost_host_path }}"
+        - "{{ src_host_ip }}"
+        - "{{ project_name }}"

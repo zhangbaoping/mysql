@@ -11,7 +11,7 @@
     
   tasks:
     - file: 
-        path: "{{ src_host_path }}"
+        path: "{{ src_host_path }}" 
         state: directory
     - file: 
         path: "{{ dst_host_path }}"

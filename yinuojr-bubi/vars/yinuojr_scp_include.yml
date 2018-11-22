@@ -1,12 +1,12 @@
-- include: yinuojr_scp_file.yml service_name=oss service_port=17009 src_server_name=test-yinuojr-oss host_ip=140.143.152.138
+- include: yinuojr_scp_file.yml service_name=oss src_server_name=test-yinuojr-oss
   tags: yinuojr_oss
-- include: yinuojr_scp_file.yml service_name=auth service_port=13009 src_server_name=test-yinuojr-auth host_ip="140.143.128.199,58.87.80.11"
+- include: yinuojr_scp_file.yml service_name=auth src_server_name=test-yinuojr-auth
   tags: yinuojr_auth
-- include: yinuojr_scp_file.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip=154.8.161.194
+- include: yinuojr_scp_file.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
   tags: yinuojr_api
-- include: yinuojr_scp_file.yml service_name=user service_port=18009 src_server_name="test-yinuojr-user" host_ip=140.143.145.253
+- include: yinuojr_scp_file.yml service_name=user src_server_name="test-yinuojr-user"
   tags: yinuojr_user
-- include: yinuojr_scp_file.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="58.87.79.105,140.143.138.123"
+- include: yinuojr_scp_file.yml service_name=notice src_server_name="test-yinuojr-notice"
   tags: yinuojr_notice
-- include: yinuojr_scp_file.yml service_name=ops service_port=21019 src_server_name=test-yinuojr-ops host_ip=140.143.152.138
+- include: yinuojr_scp_file.yml service_name=ops src_server_name=test-yinuojr-ops
   tags: yinuojr_ops

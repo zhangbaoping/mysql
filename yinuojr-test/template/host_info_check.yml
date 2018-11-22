@@ -24,3 +24,9 @@
      register: result_cpu
    - debug: msg="{{result_cpu.stdout_lines}}"
 
+   - name: check jdk
+     shell: "java -version"
+     register: result_jdk
+   - debug: msg="{{result_jdk.stdout_lines}}"
+   
+

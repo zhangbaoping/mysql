@@ -50,4 +50,10 @@
    - name: source profile
      shell: source /etc/profile
 
+   - name: jdk print
+     shell: "tail -n 5 /etc/profile"
+     register: jdk_print
+   - debug: msg="{{jdk_print.stdout_lines}}"
+
+
 

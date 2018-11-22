@@ -62,7 +62,7 @@
       shell: mv {{ project_data_path }}/{{ project_name}} {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
       when: (res == "directory exists")
 
-    - name: 更新服务，解压文件
+    - name: 更新服务，解压新文件到本地
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: (res == "directory exists")
 

@@ -28,5 +28,22 @@
      shell: "java -version"
      register: result_jdk
    - debug: msg="{{result_jdk.stdout_lines}}"
-   
+
+   - name: java_profile config
+     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
+     when: result.stdout.find('JAVA_HOME') == -1
+     with_items:
+      - export JAVA_HOME=/bubidata/server/java
+      - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
+      - export PATH=\$JAVA_HOME/bin:\$PATH
+
+   - name: copy jdk remote hosts
+     copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+
+   - name: tar xvf java_jdk.tar.gz
+     shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
+     
+   - name: source profile
+     shell: source /etc/profile
+
 

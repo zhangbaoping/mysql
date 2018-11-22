@@ -15,106 +15,57 @@
         path: "{{ project_name }}" 
         state: directory
 
-    - name: 从Jenkins服务器拷贝包到本地
-      command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
-    
-    - name: 拷贝的包路径和名称信息
-      shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
-      register: echo_out
-    - debug: msg="{{echo_out.stdout}}"
-    
-    - name: 生成本地包的MD5码
-      shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
-      register: md5sum_local
-    - debug: msg="{{md5sum_local.stdout}}"
-    
-    - name: 生成Jenkins源头包的MD5码时间
-      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
-      register: md5_src_time
-    - debug: msg="{{md5_src_time.stdout}}" 
-
-    - name: 生成Jenkins源头包的MD5码
-      shell: "ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
-      register: md5sum_src
-    - debug: msg={{md5sum_src.stdout}}
-    
-    - name: 校验源头和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
-      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "{{ project_name }} md5sum right";else echo "{{ project_name }} md5sum error";fi'
-      register: result    
-    - debug: msg="{{result.stdout}}"
-    
-
-- hosts: "{{ host_ip }}"
-  remote_user: root
-  vars:
-    src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    project_data_path: "/bubidata/server/data"
-    project_backup_path: "/data/backup"
-    project_name: "yinuojr-{{ service_name }}"
-    project_run_port: "{{ service_port }}"
-    dst_host_ip: "192.168.6.123"
-    
-  tasks:
-    - file: 
-        path: "{{ src_host_path }}"
-        state: directory
-    - file: 
-        path: "{{ dst_host_path }}"
-        state: directory
-    - file:
-        path: "{{ project_backup_path }}"
-        state: directory
-    - file:
-        path: "{{ project_name }}"
-        state: directory
-    - file:
-        path: "{{ project_data_path }}"
-        state: directory
-
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
       register: date_output
     - debug: msg={{ date_output.stdout }}
 
     - name: 判断目录是否存在，不存在返回not exists，存在返回exists 
-      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ] ; then echo "not exists" ; else echo "exists" ;fi' 
+      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ];then echo "directory not exists";else echo "directory exists";fi' 
       ignore_errors: true
       register: result    
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: 新增服务，解压文件
+    - name: 新增服务，如果是API服务，需要从生产或者预热对应服务pdf目录拷贝文件到当前服务pdf目录
+      shell: echo "需要从生产或者预热api服务pdf目录拷贝文件到当前pdf目录,很重要，很重要，很重要 !!!"
+      when: (res == "directory not exists")
+
+    - name: 新增服务，解压新文件到本地
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      when: ( res == "not exists")
+      when: (res == "directory not exists")
 
     - name: 新增服务，启动服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
-      when: ( res == "not exists")
+      when: (res == "directory not exists")
 
-    - name: 更新服务，服务停止
+    - name: 更新服务，停止服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
-      when: ( res == "exists")
+      when: (res == "directory exists")
 
-    - name: 检查端口是否关闭
+    - name: 更新服务，检查端口是否关闭
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
-      when: ( res == "exists")
+      when: (res == "directory exists")
 
     - name: 更新服务，备份现有服务程序
-      shell: mv {{ project_data_path }}/{{ project_name}}  {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
-      when: ( res == "exists")
+      shell: mv {{ project_data_path }}/{{ project_name}} {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
+      when: (res == "directory exists")
 
-    - name: 更新服务，解压文件
+    - name: 更新服务，解压新文件到本地
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      when: ( res == "exists")
+      when: (res == "directory exists")
 
-    - name: 如果是API服务，拷贝/conf/pdf/目录下面的文件到更新后对应文件目录
-      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && mv {{ project_backup_path }}/{{ project_name }}.{{date_output}}/conf/pdf {{ project_data_path }}/{{ project_name}}/conf/
-      when: ( service_name == "api" )
-
+    - name: 更新服务，如果是API服务，拷贝备份文件pdf目录下的所有文件到更新后对应pdf目录
+      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
+      when: (res == "directory exists")
+      
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
-      when: ( res == "exists")
-    
+      when: (res == "directory exists")
+
+    - name: 删除备份目录
+      shell: rm -rf {{ project_backup_path }}/{{ project_name }}
+
+    - debug: msg="{{ project_name }} 服务更新完成"
 
       

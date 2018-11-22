@@ -1,6 +1,6 @@
 ---
-- hosts: 192.168.5.100
-  remote_user: root
+- hosts: "192.168.5.100"
+  remote_user: "root"
   vars:
     src_host_path: "/home/jekins/.jenkins/workspace/{{ src_server_name }}/target"
     localhost_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
@@ -15,33 +15,34 @@
         path: "{{ project_name }}" 
         state: directory
 
-    - name: 远程拷贝包到本地
+    - name: 从Jenkins服务器拷贝包到本地
       command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
-
-    - name: 远程拷贝包名称
+    
+    - name: 拷贝的包路径和名称信息
       shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
       register: echo_out
     - debug: msg="{{echo_out.stdout}}"
     
-    - name: 生成本地包MD5码
+    - name: 生成本地包的MD5码
       shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
       register: md5sum_local
-    - debug: msg={{md5sum_local.stdout}}
+    - debug: msg="{{md5sum_local.stdout}}"
     
-    - name: 生成Jenkins源头包MD5码时间
+    - name: 生成Jenkins源头包的MD5码时间
       shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
       register: md5_src_time
     - debug: msg="{{md5_src_time.stdout}}" 
 
-    - name: 生成Jenkins源头包MD5码
+    - name: 生成Jenkins源头包的MD5码
       shell: "ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
       register: md5sum_src
     - debug: msg={{md5sum_src.stdout}}
     
-    - name: 校验源头包和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
+    - name: 校验源头和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
       shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "{{ project_name }} md5sum right";else echo "{{ project_name }} md5sum error";fi'
       register: result    
     - debug: msg="{{result.stdout}}"
+    
 
 - hosts: "{{ host_ip }}"
   remote_user: root

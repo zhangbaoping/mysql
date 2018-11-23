@@ -22,6 +22,11 @@
       shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
       register: echo_out
     - debug: msg="{{echo_out.stdout}}"
+
+    - name: 生产Jenkins源头包的版本信息
+      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'cat {{ src_host_path }}/version'
+      register: tag_version
+    - debug: msg="{{ tag_version.stdout }}"
     
     - name: 生成本地包的MD5码
       shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
@@ -32,11 +37,6 @@
       shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
       register: md5_src_time
     - debug: msg="{{md5_src_time.stdout}}" 
-
-    - name: 生产Jenkins源头包的版本信息
-      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'cat {{ src_host_path }}/version'
-      register: tag_version
-    - debug: msg="{{ tag_version.stdout }}"
 
     - name: 生成Jenkins源头包的MD5码
       shell: "ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"

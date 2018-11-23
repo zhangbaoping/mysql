@@ -33,6 +33,11 @@
       register: md5_src_time
     - debug: msg="{{md5_src_time.stdout}}" 
 
+    - name: 生产Jenkins源头包的版本信息
+      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'cat {{ src_host_path }}/version'
+      register: tag_version
+    - debug: msg="{{ tag_version.stdout }}"
+
     - name: 生成Jenkins源头包的MD5码
       shell: "ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
       register: md5sum_src

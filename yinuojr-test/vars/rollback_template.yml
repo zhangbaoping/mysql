@@ -9,10 +9,10 @@
     
   tasks:
     - file: 
-        path: "{{ src_host_path }}"
+        path: "{{ backup_host_path }}"
         state: directory
     - file: 
-        path: "{{ dst_host_path }}"
+        path: "{{ project_host_path }}"
         state: directory
     - file:
         path: "{{ project_name }}"

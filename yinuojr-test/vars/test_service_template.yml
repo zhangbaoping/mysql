@@ -75,7 +75,7 @@
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "directory exist")
 
-    - name: 删除备份目录
+    - name: 删除本地解压空目录
       shell: rm -rf {{ project_backup_path }}/{{ project_name }}
 
     - debug: msg="{{ project_name }} 服务部署完成"

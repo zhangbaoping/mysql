@@ -8,7 +8,6 @@
     project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
-    project_backup_name: "ls -lrt {{ project_backup_path }}|grep {{ project_name }}|tail -n 1"
 
   tasks:
     - file: 
@@ -19,9 +18,6 @@
         state: directory
     - file:
         path: "{{ project_backup_path }}"
-        state: directory
-    - file:
-        path: "{{ project_name }}"
         state: directory
     - file:
         path: "{{ project_data_path }}"
@@ -80,8 +76,5 @@
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "directory exist")
-
-    - name: 删除本地解压空目录
-      shell: rm -rf {{ project_backup_path }}/{{ project_name }}
 
     - debug: msg="{{ project_name }} 服务部署完成"

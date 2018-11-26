@@ -35,12 +35,13 @@
     - debug: msg="{{service_pid.stdout}}"
 
     - name: 根据变量生成进程的返回值状态
-      shell: 'if [ {{ service_pid }} != "" ];then echo "pid exist";else echo "pid not exist";fi'
-    - set_fact: res="{{pid.stdout_lines}}"
+      shell: 'if [ {{ service_pid }} != "" ];then echo "process_id exist";else echo "process_id not exist";fi'
+      regsiter: process_id
+    - set_fact: res="{{process_id.stdout_lines}}"
 
-    - name: 停止现有服务程序
+    - name: 根据服务进程状态，停止服务程序
       shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch stop
-      when: (res == "pid exist")
+      when: (res == "process_id exist")
 
     - name: 检查端口是否关闭
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10

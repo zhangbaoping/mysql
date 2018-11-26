@@ -18,17 +18,6 @@
         path: "{{ project_name }}"
         state: directory
 
-    - name: 获取最新备份文件名称
-      shell: ls -lrt {{ backup_host_path }}|grep {{ project_name }}|tail -n 1
-      register: file_name
-    - debug: msg="{{ file_name.stdout }}"
-
-    - name: 判断备份文件是否存在，不存在返回backup file not exist，存在返回backup file exist 
-      shell: 'if [ ! -d {{ file_name }} ];then echo "backup file not exist";else echo "backup file exist";fi'
-      register: result    
-    - debug: msg="{{result.stdout}}"
-    - set_fact: res="{{result.stdout}}"
-
     - name: 判断服务进程是否存在，并注册成变量
       shell: ps -ef|grep {{ project_name }}|grep launch|awk '{print $2}'
       register: service_pid
@@ -47,8 +36,19 @@
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
       when: (res == "backup file exist")
 
+    - name: 获取最新备份文件名称
+      shell: ls -lrt {{ backup_host_path }}|grep {{ project_name }}|tail -n 1
+      register: file_name
+    - debug: msg="{{ file_name.stdout }}"
+
+    - name: 判断备份文件是否存在，不存在返回backup file not exist，存在返回backup file exist 
+      shell: 'if [ ! -d {{ file_name }} ];then echo "backup file not exist";else echo "backup file exist";fi'
+      register: result    
+    - debug: msg="{{result.stdout}}"
+    - set_fact: res="{{result.stdout}}"
+
     - name: 回滚前删除现有服务程序
-      shell: cd {{ project_host_path }} && rm -rf {{ project_host_path }}/{{ project_name }}
+      shell: cd {{ project_host_path }} && mv {{ project_host_path }}/{{ project_name }} {{ project_host_path }}/{{ project_name }}.bak
       when: (res == "backup file exist")
     - debug: msg="rm -rf {{ project_host_path }}/{{ project_name }}" 
 
@@ -58,6 +58,5 @@
       
     - name: 启动服务程序性
       shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch start
-      when: (res == "backup file exist")
 
     - debug: msg="{{ project_name }} 服务回滚完成"

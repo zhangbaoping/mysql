@@ -1,0 +1,71 @@
+---
+- hosts: web
+  tasks:
+    # Install and configure Apache on RedHat/CentOS hosts.
+    - block:
+        - yum: name=httpd state=present
+        - template: src=httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+        - service: name=httpd state=started enabled=yes
+      when: ansible_os_family == 'RedHat'
+      sudo: yes
+ 
+    # Install and configure Apache on Debian/Ubuntu hosts.
+    - block:
+        - apt: name=apache2 state=present
+        - template: src=httpd.conf.j2 dest=/etc/apache2/apache2.conf
+        - service: name=apache2 state=started enabled=yes
+      when: ansible_os_family == 'Debian'
+      sudo: yes
+
+
+
+    - block:
+      - name: Shell script to connect the app to a monitoring service.
+        script: monitoring-connect.sh
+      rescue:
+      - name: 只有脚本报错时才执行
+        debug: msg="There was an error in the block."
+      always:
+      - name: 无论结果如何都执行
+        debug: msg="This always executes."
+
+---
+  # 可以给整个Playbook的所有任务打一个标签
+- hosts: proxy
+  tags: deploy
+  roles:
+    # 给角色打的标签将会应用于角色下所有的任务
+    - { role: tomcat,tags: ['tomcat','app'] }
+  tasks:
+    - name: Notify on completion.
+      local_action:
+        module: osx_say
+        msg: "{{ inventory_hostname }} is finished!"
+        voice: Zarvox
+      tags:
+        - notifications
+        - say
+    - include: foo.yml
+      tags: foo
+
+    - name: Wait for webserver to start.
+      local_action:
+        module: wait_for
+        host: webserver1
+        prot: 80
+        delay: 10
+        timeout: 300
+        state: started
+
+    - yum: name=mysql-server state=present
+      when: (is_db_server is defined) and is_db_server
+    
+    - command: my-app --status
+      register: myapp_result
+    - command: do-something-to-my-app
+      when: "'ready' in myapp_result.stdout"
+
+    
+    - name: 当软件主版本号为4的时候进行操作
+        [task here]
+      when: software_version.split('.')[0] == '4'

@@ -29,11 +29,12 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: 判断服务进程是否存在，如果存在生成变量
+    - name: 判断服务进程是否存在，并注册成变量
       shell: ps -ef|grep {{ project_name }}|grep launch|awk '{print $2}'
       register: service_pid
+    - debug: msg="{{service_pid.stdout}}"
 
-    - name: 打印进程号，并返回进程的状态
+    - name: 根据变量生成进程的返回值状态
       shell: 'if [ {{ service_pid }} != "" ];then echo "pid exist";else echo "pid not exist";fi'
     - set_fact: res="{{pid.stdout_lines}}"
 

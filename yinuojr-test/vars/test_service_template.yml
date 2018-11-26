@@ -74,7 +74,7 @@
     - debug: msg="{{ file_name.stdout }}"
 
     - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
-      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_backup_name }}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
+      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ file_name }}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
       when: (res == "service is api")
       
     - name: 更新服务，启动服务程序

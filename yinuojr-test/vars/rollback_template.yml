@@ -59,4 +59,5 @@
     - name: 启动服务程序性
       shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "backup file exist")
+      
     - debug: msg="{{ project_name }} 服务回滚完成"

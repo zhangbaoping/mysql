@@ -30,7 +30,7 @@
     - set_fact: res="{{result.stdout}}"
 
     - name: 停止现有服务程序
-      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
+      shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch stop
       when: (res == "backup file exist")
 
     - name: 检查端口是否关闭
@@ -38,7 +38,7 @@
       when: (res == "backup file exist")
 
     - name: 回滚前删除现有服务程序
-      shell: cd {{ project_data_path }} && rm -rf {{ project_host_path }}/{{ project_name }}
+      shell: cd {{ project_host_path }} && rm -rf {{ project_host_path }}/{{ project_name }}
       when: (res == "backup file exist")
     - debug: msg="rm -rf {{ project_host_path }}/{{ project_name }}" 
 
@@ -47,6 +47,6 @@
       when: (res == "backup file exist")
       
     - name: 启动服务程序性
-      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
+      shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "backup file exist")
     - debug: msg="{{ project_name }} 服务回滚完成"

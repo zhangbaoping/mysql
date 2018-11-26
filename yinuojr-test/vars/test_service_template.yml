@@ -62,7 +62,7 @@
       when: (res == "directory exist")
 
     - name: 判断更新服务是否为API服务
-      shell: 'if [ "{{ service_name }}" == "api" ];then echo "service is not api";else echo "service is api";fi' 
+      shell: 'if [ "{{ service_name }}" == "api" ];then echo "service is api";else echo "service is not api";fi' 
       register: service_api    
     - debug: msg="{{service_api.stdout}}"
     - set_fact: res="{{service_api.stdout}}"

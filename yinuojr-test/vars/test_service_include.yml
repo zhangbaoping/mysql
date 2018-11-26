@@ -1,4 +1,4 @@
-- include: test_service_template.yml service_name=oss service_port=11209 src_server_name="test-bunuo-job" host_ip="192.168.6.128"
+- include: test_service_template.yml service_name=job service_port=11209 src_server_name="test-bunuo-job" host_ip="192.168.6.128"
   tags: yinuojr_job
 - include: test_service_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="192.168.6.128"
   tags: yinuojr_api

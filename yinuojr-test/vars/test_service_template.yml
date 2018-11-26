@@ -17,6 +17,9 @@
         path: "{{ dst_host_path }}"
         state: directory
     - file:
+        path: "{{ project_name }}" 
+        state: directory  
+    - file:
         path: "{{ project_backup_path }}"
         state: directory
     - file:
@@ -50,6 +53,9 @@
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
       when: (res == "directory exist")
 
+    - name: 删除空目录
+      shell: rm -rf {{ project_backup_path }}/{{ project_name }}
+
     - name: 更新服务，备份现有服务程序
       shell: mv {{ project_data_path }}/{{ project_name}} {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
       when: (res == "directory exist")
@@ -72,7 +78,7 @@
     - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
       when: (res == "service is api")
-      
+
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
       when: (res == "directory exist")

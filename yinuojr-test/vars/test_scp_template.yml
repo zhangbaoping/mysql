@@ -25,7 +25,7 @@
 
     - name: 生产Jenkins源头包的版本信息
       shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'cat {{ src_host_path }}/version'
-      rgnore_errors: true
+      ignore_errors: true
       register: tag_version
     - debug: msg="{{ tag_version.stdout }}"
     

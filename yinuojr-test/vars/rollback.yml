@@ -1,0 +1,52 @@
+---
+- hosts: "{{ host_ip }}"
+  remote_user: "root"
+  vars:
+    backup_host_path: "/data/backup/"
+    project_host_path: "/bubidata/server/data/"
+    project_name: "yinuojr-{{ service_name }}"
+    project_run_port: "{{ service_port }}"
+    
+  tasks:
+    - file: 
+        path: "{{ src_host_path }}"
+        state: directory
+    - file: 
+        path: "{{ dst_host_path }}"
+        state: directory
+    - file:
+        path: "{{ project_name }}"
+        state: directory
+
+    - name: 获取最新备份文件名称
+      shell: ls -lrt /data/backup/|grep {{ project_name }}|tail -n 1
+      register: file_name
+    - debug: msg="{{ file_name.stdout }}"
+
+    - name: 判断备份文件是否存在，不存在返回backup file not exist，存在返回backup file exist 
+      shell: 'if [ ! -d {{ file_name }} ];then echo "backup file not exist";else echo "backup file exist";fi'
+      register: result    
+    - debug: msg="{{result.stdout}}"
+    - set_fact: res="{{result.stdout}}"
+
+    - name: 停止现有服务程序
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
+      when: (res == "backup file exist")
+
+    - name: 检查端口是否关闭
+      wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
+      when: (res == "backup file exist")
+
+    - name: 回滚前删除现有服务程序
+      shell: cd {{ project_data_path }} && rm -rf {{ project_host_path }}/{{ project_name }}
+      when: (res == "backup file exist")
+    - debug: msg="rm -rf {{ project_host_path }}/{{ project_name }}" 
+
+    - name: 拷贝备份文件到项目服务目录
+      shell: cp -a {{ backup_host_path }}/{{ project_name}} {{ project_host_path }}
+      when: (res == "backup file exist")
+      
+    - name: 启动服务程序性
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
+      when: (res == "backup file exist")
+    - debug: msg="{{ project_name }} 服务回滚完成"

@@ -29,9 +29,17 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
+    - name: 判断服务进程是否存在，如果存在生成变量
+      shell: ps -ef|grep {{ project_name }}|grep launch|awk '{print $2}'
+      register: service_pid
+
+    - name: 打印进程号，并返回进程的状态
+      shell: 'if [ {{ service_pid }} != "" ];then echo "pid exist";else echo "pid not exist";fi'
+    - set_fact: res="{{pid.stdout_lines}}"
+
     - name: 停止现有服务程序
       shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch stop
-      when: (res == "backup file exist")
+      when: (res == "pid exist")
 
     - name: 检查端口是否关闭
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10

@@ -43,7 +43,7 @@
     - debug: msg="rm -rf {{ project_host_path }}/{{ project_name }}" 
 
     - name: 拷贝备份文件到项目服务目录
-      shell: cp -a {{ backup_host_path }}/{{ project_name}} {{ project_host_path }}
+      shell: cp -a {{ backup_host_path }}/{{ file_name }} {{ project_host_path }}
       when: (res == "backup file exist")
       
     - name: 启动服务程序性

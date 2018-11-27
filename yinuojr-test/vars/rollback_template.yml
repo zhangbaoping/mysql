@@ -36,6 +36,15 @@
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
       when: (res == "backup file exist")
 
+    - name: 生成时间变量
+      command: date +"%Y%m%d%H%M"
+      register: date_output
+    - debug: msg={{ date_output.stdout }}
+
+    - name: 回滚前删除现有服务程序
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output.stdout }}
+      when: (res == "backup file exist")
+
     - name: 获取最新备份文件名称
       shell: ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1
       register: file_name
@@ -47,17 +56,8 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: 生成时间变量
-      command: date +"%Y%m%d%H%M"
-      register: date_output
-    - debug: msg={{ date_output.stdout }}
-
-    - name: 回滚前删除现有服务程序
-      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output.stdout }}
-      when: (res == "backup file exist")
-
     - name: 拷贝备份文件到项目服务目录
-      shell: cp -a {{ backup_data_path }}/{{ file_name }} {{ project_data_path }}
+      shell: cp -a "ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1" {{ project_data_path }}
       when: (res == "backup file exist")
       
     - name: 启动服务程序性

@@ -2,8 +2,8 @@
   tags: yinuojr_job
 - include: test_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
   tags: yinuojr_api
-- include: test_scp_template.yml service_name=auth src_server_name="test-yinuojr-auth"
-  tags: yinuojr_auth
+#- include: test_scp_template.yml service_name=auth src_server_name="test-yinuojr-auth"
+#  tags: yinuojr_auth
 #- include: test_scp_template.yml service_name=user src_server_name="test-yinuojr-user"
 #  tags: yinuojr_user
 #- include: test_scp_template.yml service_name=notice src_server_name="test-yinuojr-notice"

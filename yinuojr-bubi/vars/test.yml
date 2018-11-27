@@ -6,4 +6,7 @@
       shell: echo "123"
       register: echo
     - debug: msg="{{ echo.stdout }}"
-    
+
+    - name: ls -lrt
+      shell: ls -lrt /tmp/
+

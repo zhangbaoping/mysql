@@ -53,7 +53,7 @@
     - debug: msg={{ date_output.stdout }}
 
     - name: 回滚前删除现有服务程序
-      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output }}
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output.stdout }}
       when: (res == "backup file exist")
 
     - name: 拷贝备份文件到项目服务目录

@@ -1,7 +1,3 @@
-#- include: yinuojr_scp_template.yml service_name=oss src_server_name=test-yinuojr-oss
-#  tags: yinuojr_oss
-#- include: yinuojr_scp_template.yml service_name=auth src_server_name=test-yinuojr-auth
-#  tags: yinuojr_auth
 - include: yinuojr_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
   tags: yinuojr_api
 - include: yinuojr_scp_template.yml service_name=job src_server_name="test-bunuo-job"
@@ -12,3 +8,7 @@
 #  tags: yinuojr_user
 #- include: yinuojr_scp_template.yml service_name=ops src_server_name=test-yinuojr-ops
 #  tags: yinuojr_ops
+#- include: yinuojr_scp_template.yml service_name=oss src_server_name=test-yinuojr-oss
+#  tags: yinuojr_oss
+#- include: yinuojr_scp_template.yml service_name=auth src_server_name=test-yinuojr-auth
+#  tags: yinuojr_auth

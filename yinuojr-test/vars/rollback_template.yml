@@ -6,7 +6,8 @@
     project_data_path: "/bubidata/server/data"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
-    
+    backup_file_name: "ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1"
+
   tasks:
     - file: 
         path: "{{ backup_data_path }}"
@@ -51,7 +52,7 @@
       shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output.stdout }}
 
     - name: 拷贝备份文件到项目服务目录
-      shell: cp -a "ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1" {{ project_data_path }}
+      shell: cp -a "{{ backup_data_path }}/{{ backup_file_name }}" {{ project_data_path }}
       when: (res == "file exist")
       
     - name: 启动服务程序性

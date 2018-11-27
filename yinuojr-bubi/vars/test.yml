@@ -1,0 +1,9 @@
+---
+- hosts: "{{ host_ip }}"
+  remote_user: "root"
+  tasks:
+    - name: shell
+      shell: echo "123"
+      register: echo
+    - debug: msg="{{ echo.stdout }}"
+    

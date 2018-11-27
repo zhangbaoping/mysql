@@ -22,6 +22,12 @@
       shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/{{ project_name }}.zip {{ localhost_host_path }}"
       register: echo_out
     - debug: msg="{{echo_out.stdout}}"
+
+    - name: 生产Jenkins源头包的版本信息
+      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'cat {{ src_host_path }}/version'
+      ignore_errors: true
+      register: tag_version
+    - debug: msg="{{ tag_version.stdout }}"
     
     - name: 生成本地包的MD5码
       shell: "md5sum {{ localhost_host_path }}/{{ project_name }}.zip|awk '{print $1}'"

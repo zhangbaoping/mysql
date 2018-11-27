@@ -26,18 +26,13 @@
         path: "{{ project_data_path }}"
         state: directory
 
-    - name: 生成时间变量
-      command: date +"%Y%m%d%H%M"
-      register: date_output
-    - debug: msg={{ date_output.stdout }}
-
-    - name: 判断服务是否存在，不存在返回not exist，存在返回exist
+    - name: 判断服务是新增还是更新，新增返回not exist，更新返回exist
       shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ];then echo "directory not exist";else echo "directory exist";fi' 
       register: result    
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: "新增服务，解压新文件到本地，---> (注意如果是API服务，需拷贝预热或者生成pdf目录的文件到本地！！！)"
+    - name: "新增服务，解压新文件到本地 ---> (注意如果是API服务，需拷贝预热或者生成pdf目录的文件到本地！！！)"
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: (res == "directory not exist")
 
@@ -55,6 +50,11 @@
 
     - name: 删除空目录
       shell: rm -rf {{ project_backup_path }}/{{ project_name }}
+
+    - name: 生成时间变量
+      command: date +"%Y%m%d%H%M"
+      register: date_output
+    - debug: msg={{ date_output.stdout }}
 
     - name: 更新服务，备份现有服务程序
       shell: mv {{ project_data_path }}/{{ project_name}} {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
@@ -76,6 +76,5 @@
 
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
-      when: (res == "directory exist")
 
     - debug: msg="{{ project_name }} 服务部署完成"

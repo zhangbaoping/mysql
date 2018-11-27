@@ -2,17 +2,17 @@
 - hosts: "{{ host_ip }}"
   remote_user: "root"
   vars:
-    backup_host_path: "/data/backup"
-    project_host_path: "/bubidata/server/data"
+    backup_data_path: "/data/backup"
+    project_data_path: "/bubidata/server/data"
     project_name: "yinuojr-{{ service_name }}"
     project_run_port: "{{ service_port }}"
     
   tasks:
     - file: 
-        path: "{{ backup_host_path }}"
+        path: "{{ backup_data_path }}"
         state: directory
     - file: 
-        path: "{{ project_host_path }}"
+        path: "{{ project_data_path }}"
         state: directory
     - file:
         path: "{{ project_name }}"
@@ -29,7 +29,7 @@
     - set_fact: res="{{process_id.stdout_lines}}"
 
     - name: 根据服务进程状态，停止服务程序
-      shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch stop
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
       when: (res == "process_id exist")
 
     - name: 检查端口是否关闭
@@ -37,7 +37,7 @@
       when: (res == "backup file exist")
 
     - name: 获取最新备份文件名称
-      shell: ls -lrt {{ backup_host_path }}|grep {{ project_name }}|tail -n 1
+      shell: ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1
       register: file_name
     - debug: msg="{{ file_name.stdout }}"
 
@@ -47,16 +47,20 @@
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
+    - name: 生成时间变量
+      command: date +"%Y%m%d%H%M"
+      register: date_output
+    - debug: msg={{ date_output.stdout }}
+
     - name: 回滚前删除现有服务程序
-      shell: cd {{ project_host_path }} && mv {{ project_host_path }}/{{ project_name }} {{ project_host_path }}/{{ project_name }}.bak
+      shell: mv {{ project_data_path }}/{{ project_name }} {{ project_data_path }}/{{ project_name }}.{{ date_output }}
       when: (res == "backup file exist")
-    - debug: msg="rm -rf {{ project_host_path }}/{{ project_name }}" 
 
     - name: 拷贝备份文件到项目服务目录
-      shell: cp -a {{ backup_host_path }}/{{ file_name }} {{ project_host_path }}
+      shell: cp -a {{ backup_data_path }}/{{ file_name }} {{ project_data_path }}
       when: (res == "backup file exist")
       
     - name: 启动服务程序性
-      shell: source /etc/profile && cd {{ project_host_path }}/{{ project_name }}/bin && ./launch start
+      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
     - debug: msg="{{ project_name }} 服务回滚完成"

@@ -70,11 +70,6 @@
     - debug: msg="{{service_api.stdout}}"
     - set_fact: res="{{service_api.stdout}}"
 
-    - name: 获取最新备份文件名称
-      shell: ls -lrt {{ project_backup_path }}|grep {{ project_name }}|tail -n 1
-      register: file_name
-    - debug: msg="{{ file_name.stdout }}"
-
     - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
       when: (res == "service is api")

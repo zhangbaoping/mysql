@@ -51,6 +51,10 @@
     - name: 回滚前删除现有服务程序
       shell: rm -rf {{ project_data_path }}/{{ project_name }} 
 
+    - name: 获取备份文件名称
+      shell: "ls -lrt {{ backup_data_path }}|grep {{ project_name }}|tail -n 1"
+      register: backup_file_name
+
     - name: 拷贝备份文件到项目服务目录
       shell: cp -a "{{ backup_data_path }}/{{ backup_file_name }}" {{ project_data_path }}
       when: (res == "file exist")

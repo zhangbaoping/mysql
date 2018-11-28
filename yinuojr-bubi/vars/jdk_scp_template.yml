@@ -7,6 +7,7 @@
     localhost_host_path: "/bubidata/server"
 
   tasks:
+  
   - file:
       path: "{{ localhost_host_path }}"
       state: directory 
@@ -14,6 +15,9 @@
   - name: 检查环境变量是否存在jdk的配置
     shell: cat /etc/profile
     register: result
+
+  - name: 安装unzip包
+    yum: name=unzip.x86_64 state=present disablerepo=* enablerepo=packages
 
   - name: 复制jdk文件到目标主机
     copy: src={{ script_home }}/{{ jdk_package_name }} dest={{ localhost_host_path }}

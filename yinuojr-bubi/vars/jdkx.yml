@@ -30,5 +30,5 @@
       - export PATH=\$JAVA_HOME/bin:\$PATH
 
   - name: 应用配置文件生效
-    command: source /etc/profile
+    shell: source /etc/profile
     

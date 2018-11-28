@@ -5,8 +5,28 @@
     script_home: "/package"
     jdk_package_name: "java_jdk.tar.gz"
     localhost_host_path: "/bubidata/server"
+    java_directory: "/bubidata/server/java"
 
   tasks:
+  - name: check disk
+    shell: "df -hP|awk 'NR>1 && int($5) > 10'|awk '/success/{ip=$1;next}{print ip,$0}'"
+    register: result_disk
+  - debug: msg="{{result_disk.stdout_lines}}"
+
+  - name: check port
+    shell: "ss -ntl"
+    register: result_port
+  - debug: msg="{{result_port.stdout_lines}}" 
+
+  - name: check memroy
+    shell: "free -m"
+    register: result_memory
+  - debug: msg="{{result_memory.stdout_lines}}"
+  
+  - name: check cpu
+    shell: "iostat -c"
+    register: result_cpu
+  - debug: msg="{{result_cpu.stdout_lines}}"
 
   - file:
       path: "{{ localhost_host_path }}"
@@ -19,11 +39,19 @@
   - name: 安装解压命令unzip包
     yum: name="unzip.x86_64" state=installed
 
+  - name: 检查Java目录是否存在 
+    shell: 'if [ ! -d {{ java_directory }} ];then echo "java not exist";else echo "java exist";fi' 
+    register: result_java
+  - debug: msg="{{result_java.stdout_lines}}"    
+  - set_fact: res="{{result_java.stdout_lines}}"
+
   - name: 复制jdk文件到目标主机
     copy: src={{ script_home }}/{{ jdk_package_name }} dest={{ localhost_host_path }}
-
+    when: (res == "java not exist")
+    
   - name: 解压jdk包到目标路径
     shell: chdir={{ localhost_host_path }} tar zxf {{ jdk_package_name }}
+    when: (res == "java not exist")
 
   - name: 修改/etc/profile配置文件
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
@@ -32,3 +60,5 @@
       - export JAVA_HOME={{ localhost_host_path }}/java
       - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
       - export PATH=\$JAVA_HOME/bin:\$PATH
+
+  - debug: msg="java version "1.8.0_71""

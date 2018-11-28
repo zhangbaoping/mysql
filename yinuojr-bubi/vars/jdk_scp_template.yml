@@ -22,7 +22,7 @@
     shell: chdir={{ localhost_host_path }} tar zxf {{ jdk_package_name }}
 
   - name: 修改/etc/profile配置文件
-    shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile && source /root/.bashrc
+    shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
     when: result.stdout.find('JAVA_HOME') == -1
     with_items:
       - export JAVA_HOME={{ localhost_host_path }}/java

@@ -8,6 +8,10 @@
     java_directory: "/bubidata/server/java"
 
   tasks:
+  - file:
+      path: "{{ localhost_host_path }}"
+      state: directory 
+
   - name: check disk
     shell: df -hP|awk 'NR>1 && int($5) > 10'|awk '/success/{ip=$1;next}{print ip,$0}'
     register: result_disk
@@ -27,10 +31,6 @@
     shell: "iostat -c"
     register: result_cpu
   - debug: msg="{{result_cpu.stdout_lines}}"
-
-  - file:
-      path: "{{ localhost_host_path }}"
-      state: directory 
 
   - name: 安装解压命令unzip包
     yum: name="unzip.x86_64" state=installed

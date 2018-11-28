@@ -26,30 +26,19 @@
         path: "{{ project_data_path }}"
         state: directory
 
-    - name: 判断服务是新增还是更新，新增返回not exist，更新返回exist
-      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ];then echo "directory not exist";else echo "directory exist";fi' 
+    - name: 判断服务是新增还是更新
+      shell: 'if [ ! -d {{ project_data_path }}/{{ project_name }} ];then echo "new service";else echo "update service";fi' 
       register: result    
     - debug: msg="{{result.stdout}}"
     - set_fact: res="{{result.stdout}}"
 
-    - name: "新增服务，解压新文件到本地 ---> (注意如果是API服务，需拷贝预热或者生成pdf目录的文件到本地！！！)"
-      unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      when: (res == "directory not exist")
-
-    - name: 新增服务，启动服务
-      shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
-      when: (res == "directory not exist")
-
     - name: 更新服务，停止服务
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch stop
-      when: (res == "directory exist")
+      when: (res == "update service")
 
     - name: 更新服务，检查端口是否关闭
       wait_for: port={{ project_run_port }} delay=3 state=stopped timeout=10
-      when: (res == "directory exist")
-
-    - name: 删除空目录
-      shell: rm -rf {{ project_backup_path }}/{{ project_name }}
+      when: (res == "update service")
 
     - name: 生成时间变量
       command: date +"%Y%m%d%H%M"
@@ -58,23 +47,16 @@
 
     - name: 更新服务，备份现有服务程序
       shell: mv {{ project_data_path }}/{{ project_name}} {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}
-      when: (res == "directory exist")
+      when: (res == "update service")
 
-    - name: 更新服务，解压新文件到本地
+    - name: 解压新文件到本地
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
-      when: (res == "directory exist")
-
-    - name: 判断更新服务是否为API服务
-      shell: 'if [ "{{ service_name }}" == "api" ];then echo "service is api";else echo "service is not api";fi' 
-      register: service_api    
-    - debug: msg="{{service_api.stdout}}"
-    - set_fact: res="{{service_api.stdout}}"
 
     - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
-      when: (res == "service is api")
+      when: ( service_name  == "api"  and  res == "update service" )
 
-    - name: 更新服务，启动服务程序
+    - name: 启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start
 
     - debug: msg="{{ project_name }} 服务部署完成"

@@ -32,12 +32,12 @@
       path: "{{ localhost_host_path }}"
       state: directory 
 
+  - name: 安装解压命令unzip包
+    yum: name="unzip.x86_64" state=installed
+
   - name: 检查环境变量是否存在jdk的配置
     shell: cat /etc/profile
     register: result
-
-  - name: 安装解压命令unzip包
-    yum: name="unzip.x86_64" state=installed
 
   - name: 检查Java目录是否存在 
     shell: 'if [ ! -d {{ java_directory }} ];then echo "java not exist";else echo "java exist";fi' 

@@ -28,7 +28,4 @@
       - export JAVA_HOME={{ localhost_host_path }}/java
       - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
       - export PATH=\$JAVA_HOME/bin:\$PATH
-
-  - name: 应用配置文件生效
-    shell: source /etc/profile
     

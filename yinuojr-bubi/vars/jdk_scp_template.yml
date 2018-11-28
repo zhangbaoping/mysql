@@ -7,7 +7,7 @@
     localhost_host_path: "/bubidata/server"
 
   tasks:
-  
+
   - file:
       path: "{{ localhost_host_path }}"
       state: directory 
@@ -17,7 +17,7 @@
     register: result
 
   - name: 安装unzip包
-    yum: name=unzip.x86_64 state=present disablerepo=* enablerepo=packages
+    yum: name="unzip.x86_64" state=installed
 
   - name: 复制jdk文件到目标主机
     copy: src={{ script_home }}/{{ jdk_package_name }} dest={{ localhost_host_path }}

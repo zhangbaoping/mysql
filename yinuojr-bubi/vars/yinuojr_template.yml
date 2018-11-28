@@ -64,15 +64,15 @@
       unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       when: (res == "update service")
 
-    #- name: 判断更新服务是否为API服务
-    #  shell: 'if [ "{{ service_name }}" == "api" ];then echo "service is api";else echo "service is not api";fi' 
-    #  register: service_api    
-    #- debug: msg="{{service_api.stdout}}"
-    #- set_fact: res="{{service_api.stdout}}"
+    - name: 判断更新服务是否为API服务
+      shell: 'if [ "{{ service_name }}" == "api" ];then echo "service is api";else echo "service is not api";fi' 
+      register: service_api    
+    - debug: msg="{{service_api.stdout}}"
+    - set_fact: res="{{service_api.stdout}}"
 
-    #- name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
-    #  shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
-    #  when: (res == "service is api")
+    - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
+      shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/
+      when: (res == "service is api")
 
     - name: 更新服务，启动服务程序
       shell: source /etc/profile && cd {{ project_data_path }}/{{ project_name }}/bin && ./launch start

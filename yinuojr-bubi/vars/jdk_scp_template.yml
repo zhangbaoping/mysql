@@ -9,7 +9,7 @@
 
   tasks:
   - name: check disk
-    shell: "df -hP|awk 'NR>1 && int($5) > 10'|awk '/success/{ip=$1;next}{print ip,$0}'"
+    shell: df -hP|awk 'NR>1 && int($5) > 10'|awk '/success/{ip=$1;next}{print ip,$0}'
     register: result_disk
   - debug: msg="{{result_disk.stdout_lines}}"
 

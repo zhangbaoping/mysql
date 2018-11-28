@@ -1,34 +1,34 @@
 ---
-- hosts: 192.168.6.122,192.168.6.123
+- hosts: "{ host_ip }"
   remote_user: root
   vars: 
-    script_home: /package
+    script_home: "/package"
+    jdk_package_name: "java_jdk.tar.gz"
+    localhost_host_path: "/bubidata/server"
 
   tasks:
+  - file:
+      path: "{{ localhost_host_path }}"
+      state: directory 
 
-  # 检查环境变量是否存在jdk的配置，并定义变量result/bi
-  - name: check jdk variable 
+  - name: 检查环境变量是否存在jdk的配置
     shell: cat /etc/profile
     register: result
 
-  # 复制jdk文件到目标主机
-  - name: copy jdk remote hosts
-    copy: src=/package/java_jdk.tar.gz dest=/bubidata/server/
+  - name: 复制jdk文件到目标主机
+    copy: src={{ script_home }}/{{ jdk_package_name }} dest={{ localhost_host_path }}
 
-  # 解压jdk包到目标路径
-  - name: tar xvf java_jdk.tar.gz
-    shell: chdir=/bubidata/server tar zxf java_jdk.tar.gz
+  - name: 解压jdk包到目标路径
+    shell: chdir={{ localhost_host_path }} tar zxf {{ jdk_package_name }}
 
-  # 修改/etc/profile配置文件
-  - name: java_profile config
+  - name: 修改/etc/profile配置文件
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile
     when: result.stdout.find('JAVA_HOME') == -1
     with_items:
-      - export JAVA_HOME=/bubidata/server/java
+      - export JAVA_HOME={{ localhost_host_path }}/java
       - export CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
       - export PATH=\$JAVA_HOME/bin:\$PATH
 
-  # 应用配置文件生效
-  - name: source profile
+  - name: 应用配置文件生效
     shell: source /etc/profile
     

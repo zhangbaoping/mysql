@@ -16,7 +16,7 @@
     shell: cat /etc/profile
     register: result
 
-  - name: 安装unzip包
+  - name: 安装解压命令unzip包
     yum: name="unzip.x86_64" state=installed
 
   - name: 复制jdk文件到目标主机

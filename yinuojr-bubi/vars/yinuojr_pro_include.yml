@@ -5,5 +5,5 @@
 
 #- include: sys_service_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="112.74.245.80,112.74.247.154"
 #  tags: yinuojr_notice
-- include: sys_service_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="112.74.247.154"
+- include: sys_service_template.yml service_name=notice service_port=18009 src_server_name="test-yinuojr-notice" host_ip="112.74.247.154"
   tags: yinuojr_notice

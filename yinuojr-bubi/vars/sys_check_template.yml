@@ -5,7 +5,6 @@
     script_home: "/package"
     jdk_package_name: "java_jdk.tar.gz"
     localhost_host_path: "/bubidata/server"
-    java_directory: "/bubidata/server/java"
 
   tasks:
   - file:

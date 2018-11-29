@@ -39,19 +39,11 @@
     shell: cat /etc/profile
     register: result
 
-  - name: 检查Java目录是否存在 
-    shell: 'if [ ! -d {{ java_directory }} ];then echo "java not exist";else echo "java exist";fi' 
-    register: result_java
-  - debug: msg="{{result_java.stdout_lines}}"    
-  - set_fact: res="{{result_java.stdout_lines}}"
-
   - name: 复制jdk文件到目标主机
     copy: src={{ script_home }}/{{ jdk_package_name }} dest={{ localhost_host_path }}
-    when: (res == "java not exist")
     
   - name: 解压jdk包到目标路径
     shell: chdir={{ localhost_host_path }} tar zxf {{ jdk_package_name }}
-    when: (res == "java not exist")
 
   - name: 修改/etc/profile配置文件
     shell: /bin/echo {{ item }} >> /etc/profile && source /etc/profile

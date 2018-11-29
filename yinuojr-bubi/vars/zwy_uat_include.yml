@@ -2,5 +2,5 @@
 #  tags: yinuojr_api
 #- include: sys_service_template.yml service_name=job service_port=11209 src_server_name="test-bunuo-job" host_ip="140.143.145.20"
 #  tags: yinuojr_job
-#- include: sys_service_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="211.159.174.84,140.143.147.121"
+#- include: sys_service_template.yml service_name=notice service_port=18009 src_server_name="test-yinuojr-notice" host_ip="211.159.174.84,140.143.147.121"
 #  tags: yinuojr_notice

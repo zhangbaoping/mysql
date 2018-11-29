@@ -1,6 +1,6 @@
 #- include: sys_service_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="112.74.242.86"
 #  tags: yinuojr_api
-#- include: sys_service_template.yml service_name=job service_port=11209 src_server_name="test-bunuo-job" host_ip="112.74.250.51"
-#  tags: yinuojr_job
+- include: sys_service_template.yml service_name=job service_port=11209 src_server_name="test-bunuo-job" host_ip="112.74.250.51"
+  tags: yinuojr_job
 #- include: sys_service_template.yml service_name=notice service_port=11019 src_server_name="test-yinuojr-notice" host_ip="112.74.245.80,112.74.247.154"
 #  tags: yinuojr_notice

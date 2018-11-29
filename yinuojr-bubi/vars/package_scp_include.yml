@@ -1,6 +1,6 @@
-#- include: package_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
-#  tags: yinuojr_api
+- include: package_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
+  tags: yinuojr_api
 - include: package_scp_template.yml service_name=job src_server_name="test-bunuo-job"
   tags: yinuojr_job
-#- include: package_scp_template.yml service_name=notice src_server_name="test-yinuojr-notice"
-#  tags: yinuojr_notice
+- include: package_scp_template.yml service_name=notice src_server_name="test-yinuojr-notice"
+  tags: yinuojr_notice

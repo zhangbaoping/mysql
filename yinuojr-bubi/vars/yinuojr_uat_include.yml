@@ -1,5 +1,10 @@
-#- include: sys_service_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="123.56.227.201"
-#  tags: yinuojr_api
+- include: sys_service_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="123.56.227.201"
+  tags: yinuojr_api
+- include: sys_service_template.yml service_name=yntb service_port=14009 src_server_name="test-yinuojr-yntb" host_ip="47.94.45.24"
+  tags: yinuojr_yntb
+- include: sys_service_template.yml service_name=pay service_port=25009 src_server_name="test-yinuojr-pay-hx" host_ip="123.56.227.201"
+  tags: yinuojr_pay
+
 #- include: sys_service_template.yml service_name=job service_port=11209 src_server_name="test-bunuo-job" host_ip=""
 #  tags: yinuojr_job
 #- include: sys_service_template.yml service_name=notice service_port=18009 src_server_name="test-yinuojr-notice" host_ip="39.107.205.158,39.107.61.227"

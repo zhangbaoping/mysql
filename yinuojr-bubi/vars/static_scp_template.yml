@@ -1,0 +1,41 @@
+---
+- hosts: "192.168.5.100"
+  remote_user: "root"
+  vars:
+    project_name: "test-bunuo-scf-webview-new"
+    src_host_path: "/home/jekins/.jenkins/workspace/{{ test-bunuo-scf-webview-new }}/dist"
+    localhost_host_path: "/data/backup/{{ test-bunuo-scf-webview-new }}/"
+    src_host_ip: "192.168.2.40"
+
+  tasks:
+    - file:
+        path: "{{ localhost_host_path }}" 
+        state: directory
+
+    - name: 从Jenkins服务器拷贝static包到本地
+      command: "scp root@{{ src_host_ip }}:{{ src_host_path }}/* {{ localhost_host_path }}"
+    
+    - name: 拷贝的包路径和名称信息
+      shell: echo "scp root@{{ src_host_ip }}:{{ src_host_path }}/* {{ localhost_host_path }}"
+      register: echo_out
+    - debug: msg="{{echo_out.stdout}}"
+    
+    - name: 生成本地包的SIZE
+      shell: du -sh|awk '{print $1}'
+      register: size_local
+    - debug: msg="{{size_local.stdout}}"
+    
+    - name: 生成Jenkins源头包的SIZE
+      shell: ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} 'stat {{ src_host_path }}/{{ project_name }}.zip|grep "最近改动"|cut -d " " -f 1,2'
+      register: md5_src_time
+    - debug: msg="{{md5_src_time.stdout}}" 
+
+    - name: 生成Jenkins源头包的MD5码
+      shell: "ssh -o StrictHostKeyChecking=no root@{{ src_host_ip }} md5sum {{ src_host_path }}/{{ project_name }}.zip|awk '{print $1}'"
+      register: md5sum_src
+    - debug: msg={{md5sum_src.stdout}}
+    
+    - name: 校验源头和本地包的MD5码是否一致，一致输出md5sum right,不一致输出md5sum error
+      shell: 'if [ "$md5sum_local" = "$md5sum_src" ];then echo "{{ project_name }} md5sum right";else echo "{{ project_name }} md5sum error";fi'
+      register: result    
+    - debug: msg="{{result.stdout}}"

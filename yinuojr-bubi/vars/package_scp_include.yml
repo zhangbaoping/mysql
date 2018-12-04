@@ -1,6 +1,6 @@
 - include: package_scp_template.yml service_name=api src_server_name="test-bunuo-scf/scf-main"
   tags: yinuojr_api
-- include: package_scp_template.yml service_name=yntb src_server_name="test-yinuojr-yntb"
+- include: package_scp_template.yml service_name=front-yntb src_server_name="test-yinuojr-yntb"
   tags: yinuojr_front_yntb
 - include: package_scp_template.yml service_name=pay src_server_name="test-yinuojr-pay-hx"
   tags: yinuojr_pay

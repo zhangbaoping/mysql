@@ -1,5 +1,5 @@
 ---
-- hosts: "47.94.45.24"
+- hosts: "112.74.246.200,112.74.242.86"
   remote_user: root
   vars: 
     script_home: "/package"

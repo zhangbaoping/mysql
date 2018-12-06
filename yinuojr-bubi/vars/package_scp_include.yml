@@ -2,10 +2,10 @@
 #  tags: yinuojr_api
 #- include: package_scp_template.yml service_name=front-yntb src_server_name="test-yinuojr-yntb"
 #  tags: yinuojr_front_yntb
-- include: package_scp_template.yml service_name=pay src_server_name="test-yinuojr-pay-hx"
-  tags: yinuojr_pay
-- include: package_scp_template.yml service_name=front-hxb src_server_name="test-yinuojr-pay-bank-front"
-  tags: yinuojr_front_hxb
+#- include: package_scp_template.yml service_name=pay src_server_name="test-yinuojr-pay-hx"
+#  tags: yinuojr_pay
+#- include: package_scp_template.yml service_name=front-hxb src_server_name="test-yinuojr-pay-bank-front"
+#  tags: yinuojr_front_hxb
 
 #- include: package_scp_template.yml service_name=job src_server_name="test-bunuo-job"
 #  tags: yinuojr_job

@@ -3,7 +3,7 @@
   remote_user: "root"
   vars:
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
-    dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
+    #dst_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     project_data_path: "/bubidata/server/data"
     project_backup_path: "/data/backup"
     project_name: "yinuojr-{{ service_name }}"
@@ -14,9 +14,9 @@
     - file: 
         path: "{{ src_host_path }}"
         state: directory
-    - file: 
-        path: "{{ dst_host_path }}"
-        state: directory
+    #- file: 
+    #    path: "{{ dst_host_path }}"
+    #    state: directory
     - file:
         path: "{{ project_name }}" 
         state: directory  

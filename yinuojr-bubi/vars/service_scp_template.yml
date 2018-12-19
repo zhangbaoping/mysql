@@ -1,0 +1,22 @@
+---
+- hosts: "{{ host_ip }}"
+  remote_user: "root"
+  vars:
+    src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
+    dst_host_path: "/data/backup/newpackage/"
+    project_name: "yinuojr-{{ service_name }}"
+
+  tasks:
+    - file: 
+        path: "{{ src_host_path }}"
+        state: directory
+    - file: 
+        path: "{{ dst_host_path }}"
+        state: directory
+    - file:
+        path: "{{ project_name }}" 
+        state: directory  
+
+    - name: 解压新文件到本地
+      unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ dst_host_path }}
+

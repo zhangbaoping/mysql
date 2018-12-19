@@ -5,6 +5,7 @@
     src_host_path: "/data/backup/yinuojr-{{ service_name }}/target"
     dst_host_path: "/data/backup/newpackage/"
     project_name: "yinuojr-{{ service_name }}"
+    
 
   tasks:
     - file: 

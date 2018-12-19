@@ -53,6 +53,7 @@
     - name: 解压新文件到本地
       #unarchive: src={{ dst_host_path }}/{{ project_name }}.zip dest={{ project_data_path }}
       shell: mv {{ project_new_package }}/{{ project_name }} {{ project_data_path }}
+    - debug: msg="ls -lrt {{ project_data_path }}/{{ project_name }}"
 
     - name: 如果是API服务，拷贝备份文件pdf目录下的所有文件到本地pdf目录
       shell: rm -rf {{ project_data_path }}/{{ project_name}}/conf/pdf/ && cp -a {{ project_backup_path }}/{{ project_name }}.{{date_output.stdout}}/conf/pdf/ {{ project_data_path }}/{{ project_name}}/conf/

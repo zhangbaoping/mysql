@@ -13,10 +13,9 @@
     - file: 
         path: "{{ dst_host_path }}"
         state: directory
-    - file:
-        path: "{{ project_name }}" 
-        state: directory  
 
     - name: 解压新文件到本地
       unarchive: src={{ src_host_path }}/{{ project_name }}.zip dest={{ dst_host_path }}
+
+
 

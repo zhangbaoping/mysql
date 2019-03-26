@@ -1,4 +1,4 @@
-#- include: service_scp_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="154.8.161.194"
+#- include: service_scp_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip=""
 #  tags: yinuojr_api
-#- include: service_scp_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip="112.74.242.86"
+#- include: service_scp_template.yml service_name=api service_port=28009 src_server_name="test-bunuo-scf/scf-main" host_ip=""
 #  tags: yinuojr_api
